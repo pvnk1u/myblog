@@ -6,6 +6,7 @@
 title: YOLO
 subtitle: ''
 description: ''
+favicon: /img/music.png 
 keywords:
 author: pvnk1u
 language: zh-CN
@@ -105,4 +106,4 @@ deploy:
   - type: git
     repo: https://github.com/pvnk1u/pvnk1u.github.io.git # 注意要把地址改为自己的仓库地址
     branch: main
-    message: "Build at {{ now('YYYY-MM-DD HH:mm:ss Z') }}"
+    message: "Build at {{ now('yyyy-MM-DD HH:mm:ss Z') }}"
