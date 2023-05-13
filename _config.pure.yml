@@ -113,7 +113,7 @@ repository:
 # Gitment
 # Introduction: https://imsun.net/posts/gitment-introduction/
 comment:
-  type: valine
+  type: disqus
   disqus: # enter disqus shortname here
   youyan: 
     uid: 1783844 # enter youyan uid 
@@ -193,7 +193,7 @@ profile:
   gravatar: # Gravatar email address, if you enable Gravatar, your avatar config will be overriden
   author: Yolo
   author_title: Web Developer & Designer
-  author_description: 一切都是最好的安排
+  author_description: Everything happens for the best
   location: Hangzhou, China
   follow: https://github.com/pvnk1u
   # Social Links

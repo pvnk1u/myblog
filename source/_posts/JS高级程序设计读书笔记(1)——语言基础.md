@@ -1,5 +1,5 @@
 ---
-title: "JavaScript高级程序设计读书笔记(1)——语言基础" 
+title: "JS高级程序设计读书笔记(1)——语言基础" 
 date: 2022-07-18T12:32:39+08:00
 draft: false
 tags: ["web","javascript"]
