@@ -6,7 +6,7 @@ tags: ["web","javascript"]
 categories:
   - "web"
   - "javascript"
-tac: true
+toc: true
 ---
 
 # Selectors API
