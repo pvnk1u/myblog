@@ -119,3 +119,124 @@ CSS中的渐进增强同样也反映在浏览器如何对待新属性上。任�
 </ul>
 ```
 
+先利用css属性在文档中创造一个product-list模块。在css里，用类名来定义一类事物。这里的product-list就意味着它可以是任何商品列表。换句话说，为product-list写好样式后，不仅可以用在这里，还可以用在网站的任何地方。
+
+
+
+给元素添加类名时，即使类名明确用于样式，也不要体现出其视觉效果。正确的做法是让类名表示组件的类型。比如这里的类名是product-list，而非泛泛的large-centered-list。
+
+
+
+id和class最主要的区别是ID只能应用到页面中的一个元素。也就是说，不能像product-list那样使用ID把页面中的模块定义为可重用的“模板”。ID应该用来标识特定模块的特定实例，比如：
+
+```css
+<ul id="primary-product-list" class=product-list>
+	<li><a href="/product/1">Product1</a></li>
+	<li><a href="/product/2">Product2</a></li>
+	<li><a href="/product/3">Product3</a></li>
+</ul>
+```
+
+这是product-list的一个实例，它因为有同样的class属性而获得了相应的样式。但在这里，这个实例也被ID定义为primary-product-list。每个页面通常只能有一个主要商品的列表，因此这个ID值还是比较恰当的。利用这个ID，可以为这个模块实例添加额外的样式，可以增加一些JavaScript交互，还可以作为页内导航的目标。
+
+
+
+实际开发中，一般不建议把ID属性作为CSS的“接入点”。利用类来添加样式往往能够让代码更简单也更容易维护。ID可以用于在文档中标识元素，但通常不用于添加样式。
+
+
+
+## 结构化元素
+
+HTML5新增了一批结构化元素：
+
+- section
+- header
+- footer
+- nav
+- article
+- aside
+- main
+
+增加这些新元素是为了在HTML文档中创建逻辑性区块。它们可以用于包含独立内容（article）、导航组件（nav）、特定区块的头部（header），等等。其中，main元素是最新增加的，用于高亮页面中包含主要内容的区域。
+
+
+
+除了main之外，所有其他新元素都可以在一个文档中多次出现，以便让机器人和人更好地理解文档。在HTML5引入这些新元素之前，经常能看到带有类似类名的div元素，如下：
+
+```html
+<div class="article">
+	<div class="header">
+		<h1>How I became a CSS Master</h1>
+	</div>
+	<p>Ten-thousand hours.</p>
+</div>
+```
+
+其中的div元素对文档而言并没有语义价值，只是借助类名作为添加样式的“接入点”而已。现在有了HTML5的新元素，这段标记可以改写成这样：
+
+```css
+<article>
+	<header>
+		<h1>How I became a CSS Master</h1>
+	</header>
+	<p>Ten-thousand hours.</p>
+</article>
+```
+
+经过修改，这段HTML的语义得到了增强，但同时也产生了意外的副作用。此时，只能通过article和header元素来添加样式了。添加样式的CSS可能会是这样：
+
+```css
+article{
+	/* 样式 */
+}
+
+article header{
+	/* 其他样式 */
+}
+```
+
+但article和header都可能在同一个页面中多次出现。如果确实存在这种重用的情况，那么这段CSS代码就会应用于所有其他相同的元素上，此时，更好的做法是把这两个例子结合起来：
+
+```css
+<article class="post">
+	<header class="post-header">
+		<h1>How I became a CSS Master</h1>
+	</header>
+	<p>Ten-thousand hours.</p>
+</article>
+```
+
+相应的CSS规则就可以使用类名为这段标记应用样式了：
+
+```css
+.post{
+	/* 样式 */
+}
+
+.post-header{
+	/* 其他样式 */
+}
+```
+
+
+
+## div和span
+
+即使有了新语义元素，div元素依然不多余。在没有合适的语义元素的情况下，div仍然是给内容分组的一个不错的选择。
+
+
+
+与div元素类似的还有span。同样，在无须表示语义、仅需添加样式的情况中，可以使用span。与div不同，span是文本级元素，可以用于在文本流中建立结构。不过在使用无语义的span之前，也一样要确保真的不需要使用任何语义元素。比如，使用time标记时间和日期，使用q标记引用，使用em标记需要强调的内容，使用strong标记需要重点强调的内容。
+
+
+
+
+
+## 重新定义的表现性文本元素
+
+时至今日，`<b>`和`<i>`可以算是幸存的表现型标记了，它们以前分别用于将文本标记为粗体（bold）和斜体（italic）。HTML5最终决定保留它们，但改变了它们的含义。多数情况下，应该选择使用`<em>`或`<strong>`，因为它们是用来强调及重点强调内容的语义正确的选择。
+
+
+
+
+
