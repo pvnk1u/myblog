@@ -277,3 +277,303 @@ CSS:
 
 
 
+一些最常见的用于超链接的伪类列举如下。在涵盖最常见HTML元素的基础样式表中，应该始终包括它们：
+
+```css
+/* 未访问过的链接为蓝色 */ 
+a:link{
+	color: blue;
+}
+
+/* 访问过的链接为绿色 */
+a:visted{
+	color: green;
+}
+
+/* 超链接在鼠标悬停及获取键盘焦点时为红色 */
+a:hover,
+a:focus{
+	color: red;
+}
+
+/* 活动状态时为紫色 */
+a:active{
+	color: purple
+}
+```
+
+以上伪类的先后次序很重要。:link和:visited应该排在前面，然后才是与用户交互相关的那些。这样一来，当用户鼠标悬停在链接上，或者链接获得键盘焦点时，:hover和:focus规则会覆盖:link和:hover规则。最后，当鼠标点击或键盘回车选择链接时，应用:active规则。
+
+
+
+### 目标与反选
+
+另一个有用的伪类是:target，它匹配的元素有一个ID属性，而且该属性的值出现在当前页面URL末尾的井号（#）后边。如果打开链接http:example.com/blog/1/#comment-3，找到该页面中标记为`<article class="comment" id="comment-3">...</article> `的评论，那么可以通过以下规则高亮该条评论：
+
+```css
+.comment:target{
+	background-color: #fffec4;
+}
+```
+
+现在，假设想高亮一条评论，而该评论不是因投票否决而被隐藏的。也有一个选择符专门用于排除某些选择符：它就是反选（negation）伪类，或者:not()选择符。如果被标记为“投票否决”(downvoted)的评论都有一个特殊的类名，那么就可以像下面这样来改写规则：
+
+```css
+.comment:target:not(.comment-downvoted){
+	backgroud-color: #fffec4;
+}
+```
+
+
+
+##  结构化伪类
+
+CSS3新增了一大批与文档结构相关的新伪类。其中最常用的是nth-child选择符，可以用来交替地为表格应用样式：
+
+```css
+tr:nth-child(odd){
+	background: yellow;
+}
+```
+
+这条规则会从表格的第一行开始，将后面每隔一行的背景变成黄色。nth-child选择符就像一个函数，可以接受很多不同的表达式作为参数。如前例所示，它可以接受odd（奇数）和even（偶数）作为参数。这个参数还可以直接是数值，表示目标元素的序数位置。
+
+
+
+还有一个伪类选择符也支持这种表达式，比如：
+
+```css
+:nth-last-child(N)
+```
+
+:nth-last-child选择符与:nth-child选择符类似，只不过是从最后一个元素倒序计算。
+
+
+
+## 表单伪类
+
+HTML5为表单输入框新增了几个属性，表示必填的required就是其中之一。
+
+```html
+<label for="field-name">Name: </label>
+<input type="text" name="field-name" id="field-name" />
+```
+
+如果想高亮这个必填控件，可使用:required伪类来选择带有required属性的表单元素，并给它的边框设置一个不同的颜色。
+
+```css
+input:required{
+	outline: 2px solid #000;
+}
+```
+
+类似的，可以像下面这样使用：optional伪类，为没有required属性的控件添加样式：
+
+```css
+input:optional{
+	border-color:#ccc;
+}
+```
+
+此外，还有针对有效和无效控件的伪类。为满足某个输入框要求填写类型内容（如电子邮件地址）的需求，HTML5也为type属性新增了不少输入值，比如email：
+
+```html
+<input type="email" />
+```
+
+然后可以根据输入框中当前内容的有效性，应用不同的样式：
+
+```css
+/* 如果输入框中包含有效的电子邮件地址 */
+input[type="email"]:valid{
+	border-color: green;
+}
+
+/* 如果输入框中的内容不是有效的电子邮件地址 */
+input[type="email"]:invalid{
+	border-color: red;
+}
+```
+
+除此之外，还有针对type值为number的:inrange、:out-of-range伪类，针对readonly属性的:read-only伪类，以及针对没有readonly属性的:read-write伪类。
+
+
+
+# 层叠
+
+稍微复杂点的样式表中都可能存在两条甚至多条规则同时选择一个元素的情况。CSS通过一种叫作层叠（cascade）的机制来处理这种冲突。从CSS这个名字就可知这种机制有多重要，因为其中的C就是cascade。层叠机制的原理是为规则赋予不同的重要程度。最重要的是作者样式表，即由网页开发者所写的样式。其次是用户样式表，用户可以通过浏览器的设置选项，为网页应用自己的样式。排在最后的是浏览器（或用户代码）的默认样式表，它们一般都会被作者样式表覆盖掉。为了给用户更高的优先权，CSS允许用户使用!import覆盖任何规则，包括网站作者使用!important标注的规则。!important标注要放在属性声明的后面：
+
+```css
+p{
+	font-size: 1.5em !important;
+	color: #666 !important;
+}
+```
+
+ 允许用户使用!important标注来覆盖规则，主要是出于无障碍交互的需要。比如，允许诵读困难的用户使用高对比度的用户样式表。
+
+
+
+归纳起来，层叠机制的重要性级别从高到低如下所示：
+
+1. 标注为!important的用户样式
+2. 标注为!important的作者样式
+3. 作者样式
+4. 用户样式
+5. 浏览器（或用户代码）的默认样式
+
+在此基础上，规则再按选择符的特殊性排序。特殊性高的选择符会覆盖特殊性低的选择符。如果两条规则的特殊性相等，则后定义的优先。
+
+
+
+
+
+# 特殊性
+
+为了量化规则的特殊性，每种选择符都对应着一个数值。这样，一条规则的特殊性就表示为其每个选择符的累加值。但这里的累加计算使用的并非正常的十进制加法，而是基于位置累加，以保证10个类选择符（或者40个，甚至更多的类选择符）累加的特殊性不会大于等于1个ID选择符的特殊性。这是为了避免ID这种高特殊性选择符被一堆低特殊性选择符（如类型选择符）的累加值所覆盖。如果某条规则中用到的选择符不足10个，为简单起见，也可以使用十进制来计算其特殊性。
+
+
+
+任何选择符的特殊性都对应于如下4个级别，即a、b、c、d：
+
+1. 行内样式，a为1
+2. b等于ID选择符的数目
+3. c等于类（class）选择符、伪类选择符及属性选择符的数目
+4. d等于类型（type）选择符和伪元素选择符的数目
+
+
+
+根据以上规则，可以计算出CSS选择符的特殊性。下表是一些选择符以及它们所对应的特殊性规则：
+
+| 选择符                  | 特殊性  | 十进制特殊性 |
+| ----------------------- | ------- | ------------ |
+| style=""                | 1,0,0,0 | 1000         |
+| #wrapper #content{}     | 0,2,0,0 | 200          |
+| #content .datePosted{}  | 0,1,1,0 | 110          |
+| div#content{}           | 0,1,0,1 | 101          |
+| #content{}              | 0,1,0,0 | 100          |
+| p.comment .datePosted{} | 0,0,2,1 | 21           |
+| p.comment{}             | 0,0,1,1 | 11           |
+| div p{}                 | 0,0,0,2 | 2            |
+| p{}                     | 0,0,0,1 | 1            |
+
+乍一看这种计算特殊性的方式有点不好理解，再多解释一下。本质上而言，如果样式被写在了元素的style属性里，那么这些样式的特殊性就最高。然后，通过ID属性应用的规则，其特殊性高于未通过ID属性应用的规则。同理，通过类选择符应用的规则，其特殊性高于只通过类型选择符应用的规则。最后，如果两条规则拥有相等的特殊性，则优先应用后定义的规则，也就是层叠机制。
+
+
+
+## 利用层叠次序
+
+如果两条规则特殊性相等，则优先应用后定义的规则，这一点非常重要。这意味着我们在写样式的时候，必须考虑规则在样式中的位置，以及选择符的次序。
+
+
+
+前面的对链接元素使用伪类的例子，就是一个利用层叠次序的典型。如果每个选择符的特殊性都一样，那么它们的次序就很重要了。要是把a:visited选择符放在a:hover选择符后面，那么在访问过链接之后，悬停样式将不会起作用，因为已经被a:visted样式给覆盖了。
+
+
+
+
+
+## 控制特殊性
+
+理解特殊性是写好CSS的关键，而控制特殊性则是大型网站开发中最难处理的问题。利用特殊性，可以先为公用元素设置默认样式，然后在更特殊的元素上覆盖这些样式。在下面的例子中，为介绍性内容定义了几种不同的样式。首先将介绍性文本的颜色设为灰色，覆盖body元素上定义的默认黑色。而在主页上，介绍性文本的样式变成了浅灰色背景上的黑色字体，其中的链接是绿色：
+
+```css
+body{
+	color: black;
+}
+
+.intro{
+	padding: 1em;
+	font-size: 1.2em;
+	color: gray;
+}
+
+#home .intro{
+	color: black;
+	background: lightgray;
+}
+
+#home .intro a{
+	color: green;
+}
+```
+
+以上几条规则包含了太多的特殊性。对于小网站这不是问题，但随着网站越来越大，样式也越来越复杂，这样定义规则会导致样式难以管理。这是因为，要想给主页中的介绍性文本添加样式，规则中必须至少包含一个ID选择符和一个类选择符。
+
+
+
+比如，假设一个组件中包含着类为call-to-action的链接，为了让这个链接看上去更像按钮，可以通过如下规则为它应用背景颜色和内边距：
+
+```css
+a.call-to-action{
+	text-decoration: none;
+	background-color: green;
+	color: white;
+	padding: 0.25em;
+}
+```
+
+把这个call-to-action链接放到主页的介绍性内容中，会出现什么效果？会不怎么好看，因为链接上的文本不见了：由于给定链接样式（#home.intro a）的特殊性高于这个组件样式（a.call-to-action）的特殊性，绿色背景上的文本也成了绿色的。
+
+
+
+怎么办？必须想办法提高特殊性，比如给call-to-action组件加上更厉害的选择符：
+
+```css
+a.call-to-action,
+#home .intro a.call-to-action{
+	text-decoration: none;
+	background-color: green;
+	color: white;
+	padding: 10px;
+}
+```
+
+然而像这样因样式表增大而被迫提高特殊性，会导致选择符之间特殊性的竞争，最终导致代码不必要地复杂化。
+
+
+
+更好的做法是从一开始就简化选择符、降低特殊性：
+
+```css
+body{
+	color: black;
+}
+
+.intro{
+	font-size: 1.2em;
+	color: gray;
+}
+
+.intro-highlighted{
+	color: black;
+	background: lightgray;
+}
+
+.intro-highlighted a{
+	color: green;
+}
+
+a.call-to-action{
+	text-decoration: none;
+	background-color: green;
+	color: white;
+	padding: 10px;
+}
+```
+
+以上重写的代码改进了两个方面。首先，去掉了ID选择符，把所有选择符的特殊性降到最低。其次，去掉了对介绍性文本上下文的引用。不再将介绍性文本限定为必须在主页中，而只在原始介绍性文本基础上再命名一个特殊的版本（即intro-highlighted）。于是在标记中可以这样使用类：
+
+```html
+<p class="intro">A general intro</p>
+<p class="intro intro-highlighted">....<a href="/promo-page" class="call-to-action">promo page</a>.</p>
+```
+
+这种简化的、目标更明确的手段让作者可以对样式进行更细粒度地控制。intro-highlighted链接的样式不会再覆盖到call-to-action链接的颜色。与此同时，无须修改CSS，即可将intro-highlighted重用到其他页面，这又是一个好处。
+
+
+
+## 特殊性与调试
+
+特殊性对于调试而言非常重要，因为需要知道哪条规则优先，以及为什么优先。比如，假设有以下规则：
+
