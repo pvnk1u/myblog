@@ -575,5 +575,109 @@ a.call-to-action{
 
 ## 特殊性与调试
 
-特殊性对于调试而言非常重要，因为需要知道哪条规则优先，以及为什么优先。比如，假设有以下规则：
+特殊性对于调试而言非常重要，因为需要知道哪条规则优先，以及为什么优先。比如，假设有下列规则，两个标题会是什么颜色？
+
+```css
+#content #main h2{
+	color: gray;
+}
+
+div > #main > h2{
+	color: green;
+}
+
+#content > [id="main"] .new-story:nth-of-type(1) h2.first{
+	color: hotpink;
+}
+
+:root [id="content"]:first-child > #main h2:nth-last-child(3){
+	color: gold;
+}
+```
+
+HTML如下：
+
+```html
+<div id=”content“>
+	<main id="main">
+		<h2>Strange Times</h2>
+		<p>Here you can read bizarre news stories from around the globe.</p>
+		<div class="news-story">
+			<h2 class="first">Bog Snorkeling Champion around the globe.</h2>
+			<p>The 2008 Bog ...</p>
+		</div>
+	</main>
+</div>
+```
+
+答案是两个标题都是灰色。这是因为，第一条规则有两个ID选择符，特殊性最高。后面几个选择符看起来挺复杂，但都只包含一个ID选择符，在特殊性的较量中都会败下阵来。值得注意的是，就算选择符中包含对ID属性的引用，它仍然是属性选择符，特殊性并不高。不过对于只能通过ID属性接入样式的情况，使用属性选择符倒是避免特殊性过高的较好选择。
+
+
+
+测试特殊性问题比较难，但是现代浏览器都内置开发者工具，能非常清楚地显示应用给特殊元素的样式来自哪条规则。通过”检测元素“可以看到与元素匹配的所有CSS选择符以及规则，包括浏览器默认样式。
+
+
+
+# 继承
+
+继承和层叠的概念虽然有点类似，但实际上它们有着本质的区别。有些属性，像颜色或字体大小，会被应用它们的元素的后代所继承。比如，把body元素的文本颜色设置为黑色，那么body所有后代元素的文本颜色都会继承这个黑色。字号也一样。
+
+
+
+如果在body中设置了一个字号，就会发现页面中的标题并不会变成同样的字号。实际上，标题大小是浏览器默认样式表中设定的。**任何直接应用给元素的样式都会覆盖继承的样式，因为继承的样式没有任何特殊性。**继承的属性值没有任何特殊性，连0都说不上。这意味着使用特殊性为0的通用选择符设置的样式都可以覆盖继承的样式。为此可能会下面这种遇到”意料之外”的情况，表面上看em会继承h2的红色，但通用选择符给所有元素设置的黑色会覆盖它所继承的红色：
+
+```html
+*{
+	color: black;
+}
+
+h2{
+	color:red;
+}
+
+<h2>The emphasized text will be <em>black</em></h2>
+```
+
+
+
+# 为文档应用样式
+
+写CSS就要知道怎么把它应用到HTML文档。为文档应用样式的方法不止一种，各有利弊。
+
+
+
+## link与style元素
+
+首先，可以把样式放在style元素中，直接放在文档的head部分：
+
+```css
+<style>
+	body{
+		font-family: Avenir Next,SegoeUI,sans-serief;
+		color: grey;
+	}
+</style>
+```
+
+如果样式不多，又希望立刻应用它们，并且不愿意因为浏览器额外下载文件而耽误时间，可以使用这种方法。不过，为了让样式表能在多个页面中重用，通常最好把它保存到一个外部文件中。如果样式在外部样式表中，那么有两种方式把它们挂接到网页上。最常用的方式是使用link元素：
+
+```html
+<link href="/c/base.css" rel="stylesheet" />
+```
+
+除了link元素，还可以使用@import指令加载外部CSS文件：
+
+```html
+<style>
+	@import url("/c/modules.css")
+</style>
+```
+
+可以在HTML文档的head部分把@import指令放在style中，也可以在外部样式表中使用它。后一种用法意味着，如果网页加载外部样式表，那么浏览器后续可能还需要下载更多CSS文件。
+
+
+
+向页面中添加样式表的时候，别忘了层叠机制的原理是次序决定优先级：如果为某个元素应用样式时，有两个或更多特殊性相等的规则互相竞争，则后声明的样式胜出。
+
+
 
