@@ -312,3 +312,182 @@ HTML元素可以嵌套，元素盒子当然也可以嵌套。多数盒子都是�
 
 相对定位事实上是常规文档流定位模型的一部分，因为元素还是相对于它在常规流中的初始位置来定位。绝对定位则会把元素拿出文档流，因此也就不会占用原来的空间。与此同时，文档流中的其他元素会各自重新定位，彷佛绝对定位的那个元素没有存在过一样。
 
+![AbsolutePosition](https://pvnk1u.github.io/images/AbsolutePosition.PNG)
+
+
+
+绝对定位元素的包含块是距离它最近的定位祖先，也就是display属性设置为static之外任意值的祖先元素。如果没有这么一个定位祖先，那么它就相当于文档的根元素即html元素定位。文档的根元素也叫作起始包含块。
+
+
+
+与相对定位的盒子类似，绝对定位的盒子也可以相对于其包含块向上、下、左、右方向平移。平移绝对定位的元素提供了极大的灵活性，因为可以把元素移动到页面的任意位置。
+
+
+
+**绝对定位的盒子是脱离了常规文档流的，因此可能会遮挡页面上的其他元素。为了控制这些盒子层叠的次序，可以设置一个叫z-index的属性。z-index的属性值越大，盒子在层叠中的次序就越靠近用户的眼睛。**
+
+
+
+尽管绝对定位对于在页面上任意摆放元素非常有用，但近来已经很少被用来构建整体布局了。绝对定位的盒子脱离了常规文档流，因此很难用它们创建随视口宽度和内容长度变化而变化的自适应或者响应式布局。web技术的特点决定了不太可能指定元素在页面上的确切位置和大小。绝对定位在整体布局上几乎没人用了。
+
+
+
+## 固定定位
+
+固定定位是由绝对定位衍生出来的，不同之处在于，固定定位元素的包含块是视口（viewport）。因此，固定定位可以用来创建始终停留在窗口相同位置的浮动元素。很多网站都用这个技术让导航区始终保持可见，有的固定侧栏，有的固定顶栏。这样能确保网站的可用性，因为用户不必再费事寻找了。
+
+
+
+## 浮动
+
+另一种可见格式化模型是浮动模型。浮动盒子可以向左或向右移动，直到其外边沿接触包含块的外边沿，或接触另一个浮动盒子的外边沿。浮动盒子也会脱离常规文档流，因此常规流中的其他块级盒子的表现，几乎当浮动盒子根本不存在一样。
+
+
+
+如下图所示，向右浮动Box1时，Box1会脱离文档流并向右移动，直至其右边沿接触包含块的右边沿。同时，Box1的宽度也会收缩为适应于其中内容的最小宽度，除非通过width或min-width/max-width明确设置其宽度。
+
+
+
+![FloatBox](https://pvnk1u.github.io/images/FloatBox.PNG)
+
+
+
+如下图所示，向左浮动Box1时，它脱离文档流并向左浮动，直至其左边接触包含块的左边沿。Box1已经不在文档流中，因此不会再占用空间，这导致它浮于上方，遮住了Box2。如果向左浮动全部3个元素，Box1会向左移动，直到接触其包含块；另外两个盒子也向左移动，直到接触自己前面的浮动盒子。
+
+![MoreFloatBox](https://pvnk1u.github.io/images/MoreFloatBox.PNG)
+
+
+
+如果包含元素太窄，无法容纳所有浮动元素水平排列，则后面的浮动元素会向下浮动（如下图）。如果浮动元素高度不同，则后面的浮动元素在向下移动时可能会“卡”在前面的浮动元素右侧。
+
+![FloatBoxToBottom](https://pvnk1u.github.io/images/FloatBoxToBottom.PNG)
+
+
+
+**行盒子与清除**
+
+前面说到，浮动元素会脱离文档流，因此不会再像非浮动元素一样影响其他元素。实际上，严格来讲并非如此。如果浮动元素后面跟着的是常规文档流中的元素，那么这个元素的盒子就会当浮动元素不存在一样，该怎么布局就怎么布局。但是，这个元素盒子中的文本内容则会记住浮动元素的大小，并在排布时避开它，为其留出相应的空间。从**技术上来讲，就是跟在浮动元素后面的行盒子会缩短，从而为浮动元素留空，造成文本环绕浮动盒子的效果。事实上，浮动就是为了在网页中实现文本环绕图片的效果而引入的一种布局模型。**如下图所示：
+
+![DocAroundFloatBox](https://pvnk1u.github.io/images/DocAroundFloatBox.PNG)
+
+
+
+要阻止行盒子环绕在浮动盒子外面，需要给包含行盒子的元素应用clear属性。clear属性的值有left、right、both和none，用于指定盒子的哪一侧不应该紧挨着浮动盒子。很多人认为clear属性只是简单地删除几个用于抵消前面浮动元素的标记，事实却没有这么简单。清除一个元素时，浏览器会在这个元素上方添加足够大的外边距，从而将元素的上边沿垂直向下推移到浮动元素下方(如下图所示)。因此，如果给“已清除的”元素添加外边距，那么除非外边距的值超过浏览器自动添加的值，否则不会看到什么效果。
+
+
+
+![ClearFloat](https://pvnk1u.github.io/images/ClearFloat.PNG)
+
+
+
+浮动元素除了会导致后面的行盒子缩短，从而造成文本环绕效果外，不会对周围的元素有任何别的影响，毕竟它已经脱离了文档流。但清除一个元素本质上会为所有前面的浮动元素清理出一块垂直空间。这就为使用浮动布局创造了条件，因为周围的元素可以为浮动的元素腾出地方来。
+
+
+
+下面看看怎么利用浮动实现一个简单的布局。假设想把一张图片浮动到一个标题左边，把一小段文本浮动到标题右边。这种布局一般叫作“媒体对象”。因为左侧放一个媒体（如插图、图片或视频）、右侧放一段说明文字是一种常见的布局模式。另外，如果希望这张图片及右侧的文本被包含在另一个有背景颜色和边框的元素中。那么可以写出如下规则：
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>FloatDemo</title>
+<style>
+	.media-block{
+		backgroud-color: gray;
+		border: solid 1px black;
+	}
+
+	.media-fig{
+		float: left;
+		width: 30%; /* 给文本留出70%的宽度 */
+	}
+
+	.media-body{
+		float:right;
+		width: 65%; /* 左边再留出一点空隙来 */
+	}
+</style>
+</head>
+<body>
+    <div class="media-block">
+		<img class="media-fig" src="/img/pic.jpg"  alt="The pic" />
+		<div class="media-body">
+			<h3>Title of this</h3>
+			<p>Brief description of this</p>
+		</div>
+	</div>
+</body>
+</html>
+```
+
+不过，浮动的元素会被拿出文档流，因此类为.media-block的div不会占用空间：它只包含浮动的内容，因此无法在文档流中为它生成高度。怎样才能让这个元素从视觉上也包住浮动元素？需要在这个元素内部某处应用clear。这样就会像前面看到的一样，在清除的元素上方创造出足够的垂直外边距，从而为包住浮动元素创造出空间（如下图）。然而，由于这个例子中没有用来清除的元素，需要在结束后的div标签前额外加一添加一个空元素，然后清除该元素：
+
+```html
+/* 后补的CSS */
+.clear{
+	clear: both;
+}
+
+<div class="media-block">
+	<img class="media-fig" src="/img/pic.jpg" alt="The pic" />
+	<div class="media-body">
+		<h3>Title of this</h3>
+		<p>Brief description of this</p>
+	</div>
+	<div class="clear"></div> <!-- 额外添加的空div -->
+</div>
+```
+
+
+
+![ClearFloatToAround](https://pvnk1u.github.io/images/ClearFloatToAround.PNG)
+
+这样就实现了想要的布局，但也引入了“多余”的标记。有时候可能会有现成的元素用于清除，但有时候就不得不像这里一样，额外加入与布局没什么关系的标记。其实还有更好的方法。
+
+
+
+要改进这个例子，可以使用:after伪类来模拟额外的清除元素。把下面的规则应用给包含浮动元素的容器div，就会在它内部的末尾生成一个盒子，并在这个盒子上应用清除规则：
+
+```css
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>FloatDemo</title>
+<style>
+	.media-block{
+		backgroud-color: gray;
+		border: solid 1px black;
+	}
+	
+	.media-fig{
+		float: left;
+		width: 30%; /* 给文本留出70%的宽度 */
+	}
+
+	.media-body{
+		float:right;
+		width: 65%; /* 左边再留出一点空隙来 */
+	}
+	
+	.media-block:after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+	
+</style>
+</head>
+<body>
+    <div class="media-block">
+		<img class="media-fig" src="./BoxModel.PNG"  alt="The pic" />
+		<div class="media-body">
+			<h3>Title of this</h3>
+			<p>Brief description of this</p>
+		</div>
+	</div>
+</body>
+</html>
+```
+
