@@ -274,3 +274,40 @@ text-align属性可以接受下列任意一个关键字值：left、right、cent
 
 把整篇文章宽度都限制在36em可以达到限制行长的目的，但是对于大屏幕而言，却又太浪费空间了，留着大片的空白很可惜。有时候，为了有效利用宽屏，可以把文本分成多栏，并对每栏的宽度加以限制。
 
+
+
+如果把之前设置的max-width增加到70em，那么可以分成3栏。为此，要把columns属性设置为想要的最小宽度。栏间距通过column-gap属性控制：
+
+```css
+article{
+	max-width: 70em;
+	columns: 20em;
+	coumn-gap:1.5em;
+	margin: 0 auto;
+}
+```
+
+这里的columns属性是column-count和column-width属性的简写形式。如果只设置column-count属性，浏览器会严格生成指定数量的栏，不管宽度如何。如果同时设置了column-count和column-width，则前者会作为最大栏数，后者会作为最小栏宽。
+
+
+
+```css
+columns: 20em; /* 在保证最小宽度20em的前提下，自动设置栏数 */
+
+column-width: 20em; /* 同上 */
+
+ columns:3 /* 3栏，自动设置宽度 */
+ 
+ columns-count: 3; /* 同上 */
+ 
+ columns: 3 20em; /* 至少3栏，每栏宽度至少20em */
+ 
+ /* 以下两条声明的组合相当于以上代码的简写形式 */
+ column-count: 3;
+ column-width: 20em;
+```
+
+
+
+
+
