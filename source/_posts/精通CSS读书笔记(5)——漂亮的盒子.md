@@ -325,3 +325,173 @@ background-position属性既可以使用关键字，也可以使用像素、em�
 
 
 
+给background-size明确指定一个值，可以重新设置图片大小，也可以让它随元素大小缩放而缩放。
+
+
+
+如果还是那张大图，由于某种原因希望它显示的小一点，那么可以重新给它一个尺寸：
+
+```css
+.profile-box{
+	background-size: 400px 240px;
+}
+```
+
+要让图片随元素缩放而缩放，则必须使用百分比值。不过要注意，**百分比值并不是相对于图片固有大小，而是相对于容器大小。因此，简单地把图片宽度和高度都设置成百分比值，可能会因容器高度变化而导致图片变形。**
+
+
+
+更好的做法是只给一个维度设置百分比值，另一个维度设置关键字值auto。比如，要是想让图片宽度始终保持为100%（即x轴，第一个值），同时保持自己固有的宽高比，可以这样写：
+
+```css
+.profile-box{
+	background-box: 100% auto;
+}
+```
+
+
+
+百分比值赋予了我们控制的灵活度，但也不是任何情况下都适用。有时候，我们会希望背景图片的任何一边都不要被切掉。还有一种情况比如前面简介页面的头部区域，我们希望图片始终都能完全覆盖元素。好在CSS为此也提供了一些关键字值。
+
+
+
+首先，可以把背景大小设置为contain。这个值可以让浏览器尽可能保持图片最大化，同时不改变图片的宽高比。与前面的例子类似，但浏览器会自动决定哪一边使用auto值，哪一边使用100%。代码如下所示：
+
+```css
+.profile-box{
+	background-size: contain;
+}
+```
+
+在高而窄的元素中，方形背景最多100%宽，因此垂直方向会出现空白；而在较宽的元素中，背景最多100%高，因此水平方向会出现空白。
+
+
+
+然后，第二个关键字是cover，意思是图片会缩放以保证覆盖元素的每一个像素，同时不会变形。这正是我们希望的个人简介页面的效果。使用这个关键字，在一个高而窄的元素中，元素高度会被填满，但图片左右两边会被切掉；而在一个较宽的元素中，元素宽度会被填满，但图片上下两边会被切掉。代码如下:
+
+```css
+.profile-box{
+	background-size: cover;
+}
+```
+
+
+
+
+
+# 边框和圆角
+
+现代浏览器对边框都提供了一定的控制，包括插入图片和圆角，让边框不再是简单的矩形。
+
+
+
+先简单回顾下边框属性。
+
+1. 可以分别为盒子的各边设置边框，也可以一次性为四边设置边框。
+2. 可以使用border-width一次性设置所有边框的宽度，也可以使用border-top-width这样的方位属性设置某条边框的宽度。除非明确指定box-sizing属性，否则边框宽度会影响盒子的尺寸。
+3. 同理，可以使用border-color设置所有边框的颜色，也可以使用border-left-color这样的方式属性设置某条边框的颜色。
+4. 边框的样式可以使用border-style（或border-right-style这样的方位属性）来设置，取值中最常用的是solid、dashed或dotted等关键字。
+5. 最后，可以使用border简写属性来设置所有边框属性。具体来说，可以把所有边设置成相同的宽度、样式、颜色，比如border: 2px solid #000;
+
+
+
+## 边框半径：圆角
+
+
+
+给border-radius属性一个长度值，就可以一次性设置盒子四个角的半径。下面给简介页面添加一个头像，让包含头像的元素拥有圆角。首先是标记：
+
+```
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile with border radius</title>
+
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background-color: #ddd;
+    }
+    .profile-box {
+      position: relative;
+      height: 600px;
+      background-image: url(img/big-cat.jpg);
+      background-size: cover;
+      background-position: 50% 30%;
+      border-bottom: 1px solid #666;
+    }
+
+    .profile-photo {
+      width: 160px;
+      min-height: 200px;
+      position: absolute;
+      bottom: -60px;
+      left: 5%;
+      padding: .5em;
+      -webkit-border-radius: .5em;
+              border-radius: .5em;
+      background-color: #fff;
+      border: 1px solid #777;
+	  border-radius: 0.5em;
+    }
+    .profile-photo img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+    .username {
+      font-size: 20px;
+      color: #666;
+      margin: .35em 0 0;
+    }
+  </style>
+</head>
+<body>
+  <header class="profile-box" role="banner">
+    <div class="profile-photo">
+      <img src="img/profile.jpg" alt="Charles the Cat">
+      <h1 class="username">@CharlesTheCat</h1>
+    </div>
+  </header>
+</body>
+</html>
+```
+
+在这段代码里，首先设置了父header容器的定位为相对定位：
+
+```css
+.profile-box{
+	position: relative;
+	/* 其他代码 */
+}
+```
+
+然后设置了头像元素.profile-photo的样式：
+
+```css
+.profile-photo {
+      width: 160px;
+      min-height: 200px;
+      position: absolute;
+      bottom: -60px;
+      left: 5%;
+      padding: .5em;
+      -webkit-border-radius: .5em;
+              border-radius: .5em;
+      background-color: #fff;
+      border: 1px solid #777;
+	  border-radius: 0.5em;
+}
+```
+
+**在这里，必须要先设置父header容器的定位为relative相对定位，子元素头像元素profile-photo的定位才会生效。这是因为：在父元素没有设置相对定位或绝对定位的情况下，子元素设置absolute绝对定位时是相对于根元素（即HTML元素）来定位的。当父元素设置了相对或绝对定位，元素会相对于离自己最近的设置了相对或绝对定位的父元素进行定位。**定位设置完成后，又通过border设置了头像元素边框的宽度及颜色，并通过border-radius设置边框样式为圆角。
+
+
+
+
+
+
+
