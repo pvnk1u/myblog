@@ -126,6 +126,48 @@ toc: true
 
    
 
-   
+   比如，如果希望让某元素总是与其外部元素保持一定距离，但又不给任何元素设定大小。如下图所示，一张图片上有一个包含文本的元素。
 
+   ```html
+   <header class="photo-header">
+   	<img src="images/big_spaceship.jpg" alt="An artist`s mockup of the "Dragon" spaceship">
+   	<div class="photo-header-plate">
+   		<h1>SpaceX unveil the Crew Dragon</h1>
+   		<p>Photo from SpaceX on <a href="https://www.flickr.com/photos/spacexphotos/16787988882/" >
+   		Flickr</a></p>
+   	</div>
+   </header>
+   ```
    
+   ![SpaceX](https://pvnk1u.github.io/images/SpaceX.PNG)
+
+
+
+**假设不想给这个包含标题的盒子设定明确的宽度，那么可以只指定其右、下、左边的偏移，让它自己去计算上空距离**：
+
+```css
+.photo-header{
+	position: relative;
+}
+
+.photo-header-plate{
+	position: absolute;
+	right: 4em;
+	bottom: 4em;
+	left: 4em;
+	background-color: #fff;
+	background-color: rgba(255,255,255,0.7);
+	padding: 2em;
+}
+```
+
+**无论图片多大，标题区始终都会位于距离底边及左、右两边4em的地方，而且会在标题折行的情况下自动调整高度，从而适应不同的屏幕大小。**
+
+
+
+## 定位与z-index：堆叠内容的陷阱
+
+要用好定位，还有一个重点技术必须掌握，那就是z-index，也就是堆叠元素的次序。基本原理：**静态定位（static）以外的元素会根据它们在代码树中的深度依次叠放，就像打扑克牌一样，后发的牌会压在先发的牌上面。它们的次序可以通过z-index来调整。**
+
+
+
