@@ -493,11 +493,130 @@ toc: true
 
    以下CSS标记为导航条添加了基本的颜色及字体样式，并通过轮廓线突出了链接项的边界。这里将每一项设置为占据25%的宽度，4项正好占据全部宽度。
 
-   ```
-   .navbar ul{
-   	font-family: 
+   ```css
+   nav {
+     display: block;
+   }
+   
+   .navbar ul {
+     font-family: 'Avenir Next', Avenir, Corbel, 'Franklin Gothic', 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+     list-style: none;
+     padding: 0;
+     background-color: #486a8e;
+   }
+   
+   .navbar li {
+     text-transform: uppercase;
+     display: inline-block;
+     text-align: center;
+     width: 25%;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+     background-color: #12459e;
+     outline: 1px solid #fff;
+   }
+   
+   .navbar li a {
+     display: block;
+     text-decoration: none;
+     line-height: 1.75em;
+     padding: 1em;
+     color: #fff;
    }
    ```
-
    
+   通过使用box-sizing: border-box确保每一项的边框及内边距都包含在各自25%的宽度以内。导航条本身的背景颜色是蓝灰色，链接项的颜色是深蓝色，链接文本颜色是白色。
+   
+   
+   
+   ![multilinenav](https://pvnk1u.github.io/images/multilinenav.PNG)
+   
+   **HTML源代码中的换行符被渲染成了空白符，再加上每一项25%的宽度，就导致了折行。**要消灭这些空白符，可以尝试把所有li标签都排到一行，但这种要求显示不友好。
+   
+   
+   
+   解决问题的方法也很简单粗暴，就是把包含元素ul的font-size设置为0（从而让每个空格的宽度为0），然后在每一项上重新设置大小：
+   
+   ```css
+   .navbar ul{
+   	font-size: 0;
+   }
+   
+   .navbar li{
+   	font-size: 16px;
+   	font-size: 1rem;
+   }
+   ```
+   
+   这样就如期解决了空白问题，每一项都相互靠拢，只占据了一行。但这个技术也有缺点。首先与可以继承的font-size有关。假设在导航条上设置的是16像素的font-size，那么就不能再使用em单位或比例，让每一项继承一个可伸缩的大小了。它会变成与0相乘。不过，可以使用rem单位，相对于根字体大小来保持可伸缩性。
+
+
+
+## 使用表格显示属性实现布局
+
+表格中的行恰好具有导航条例子中我们想要的特质：一组单元格恰好占满一行，而且永远不会折行。这也正是HTML表格在WEB发展早期成为页面布局垄断技术的缘由。可以通过CSS来借用表格的显示模式，不必求诸HTML表格标记。
+
+
+
+如果将前面导航条的例子改为对ul元素使用的一种表格显示模式，并将其中的每一项设置为表格单元，那么也会得到与使用行内块一样的效果：
+
+```css
+.navbar ul{
+	width: 100%;
+	display: table;
+	table-layout: fixed;
+}
+
+.navbar li{
+	width: 25%;
+	display: table-cell;
+}
+```
+
+这样可以得到相同的布局效果。
+
+
+
+**注意这里将ul元素的宽度设置为100，是为了保证导航条能扩展到与父元素同宽。与常规块不同，不设置宽度的表格会“收缩适应”内容宽度，除非包含内容的单元把它撑开，让它的宽度足以填充父容器。**
+
+
+
+表格行中每一列的宽度有两种算法。默认情况下，浏览器会使用“自动”算法。这是一种没有明确规定，但某种程度上又是事实标准的算法，基本上就是根据自身单元格内容所需的宽度来决定整个表格的宽度。
+
+
+
+另一种算法是“固定”表格布局，即使用table-layout: fixed。这种算法下的列宽由表格第一行的列决定。第一行中声明的列宽具有决定性，后续行如果遇到内容较多的情况，只能折行或者溢出。
+
+
+
+在利用表格显示模式来创建布局时，必须清楚这样也会引入表格的问题。比如，渲染为表格单元的元素无法应用外边距，给表格单元应用定位时的行为也无法预料。
+
+
+
+**表格单元格中的垂直对齐**
+
+使用表格显示模式时，表格单元格中的垂直对齐效果无须借助任何额外的技术。只要给显示为table-cell的元素应用vertical-align: middle，就可以令其中的内容在单元格中垂直居中。
+
+
+
+
+
+
+
+# Flexbox
+
+Flexbox，也就是Flexible Box Layout模块，是CSS提供的用于布局的一套新属性。这套属性包含针对容器（弹性容器，flex container）和针对其直接子元素（弹性项，flex item）的两类属性。Flexbox可以控制弹性项的如下方面：
+
+1. 大小
+2. 流动方向，水平还是垂直，正向还是反向
+3. 两个轴向上的对齐与分布
+4. 顺序，与源代码中的顺序无关
+
+
+
+Flexbox就是为了解决行内块、浮动和表格格式对应的棘手问题而生的。
+
+
+
+## 浏览器支持与语法
 
