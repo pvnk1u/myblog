@@ -201,7 +201,7 @@ toc: true
 
 # 水平布局
 
-通常，页面会随内容增加沿垂直方向扩展。后来添加的任何块容器（div、article、h1-h6等等）都会垂直堆放起来，因为**块级元素的宽度是自动计算的**。**因此，在需要给内容块设置明确宽度，并让它们水平排列时，就会出现问题。**
+通常，页面会随内容增加沿垂直方向扩展。后来添加的任何块容器（div、article、h1-h6等等）都会垂直堆放起来，因为**块级元素的宽度是自动计算的**。**因此，在需要给内容块设置明确宽度，并让它们水平排列时，就需要特殊处理。**
 
 
 
@@ -213,5 +213,291 @@ toc: true
 
 
 
-## 借助浮动
+## 使用浮动
+
+在太空飞船的例子中，有一个使用浮动的例子。figure浮动到了右侧，让行盒子对其四周环绕。同时通过margin-right的负外边距把图片向外推出去一点，以便与文本保持一些间距。
+
+```html
+<style>
+    figure{
+        background-color: #eee;
+        margin: 0;
+        padding: 1em;
+        float: right;
+        max-width: 17em;
+        margin-right: -8em; /* 向右推出 */
+        margin-left: 1em;
+	}
+</style>
+
+<p>You may think[...]</p>
+	<figure>
+		<img src="images/spaceship.jpg" alt="The Dragon spaceship in orbit around Earth.">
+		<figcaption>The "Dragon" spaceship,created by SpaceX.Image from <a href="https://www.flickr.com/photos/spacexphotos/16787988882/">Flickr.com</a></figuration>
+	</figure>
+<p>There`s various[...]</p>
+```
+
+![SpaceshipFloat](https://pvnk1u.github.io/images/SpaceshipFloat.PNG)
+
+
+
+下面的代码中，删除了这个负外边距，并把插图宽度设置为文章宽度的一半，而且还增加了第二幅插图。此时，两幅插图并肩而立。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Two floated images side by side</title>
+  <script src="js/html5shiv.min.js"></script>
+  <style>
+    body {
+      font-family: Georgia, Times New Roman, serif;
+      line-height: 1.5;
+      padding: 2em 8em;
+      max-width: 35em;
+      margin: 0 auto;
+    }
+    h1 {
+      font-family: Avenir, Franklin Gothic, sans-serif;
+    }
+
+    figure {
+      background-color: #eee;
+      margin: 0;
+      padding: 1em;
+      box-sizing: border-box;
+      float: right;
+      max-width: 50%;
+    }
+    figure img {
+      width: 100%;
+      display: block;
+      margin-bottom: .5em;
+    }
+    figcaption {
+      font-style: italic;
+      font-size: .875em;
+    }
+  </style>
+</head>
+<body>
+  <h1>A fake article about spaceships</h1>
+
+  <p>This is a fake article about spaceships. Remember when you did presentations in middle school, and you told the class about what your assignment was about, then read aloud from the paper you had written, including the title?
+    ”My assignment is about spaceships. Spaceships. Spaceships are very large, and fly in space...”.</p>
+    <p>You may think that spaceships are fake, like this article, but they’re not. There are actual spaceships,
+  flying in space right now, probably. For example, there’s the International Space Station, which is 
+  a spaceship of sorts. Well, actually it’s a space station, which is even cooler!</p>
+  <figure>
+    <img src="images/spaceship.jpg" alt="The Dragon spaceship in orbit around Earth.">
+    <figcaption>The ”Dragon” spaceship, created by SpaceX. Image from <a href="https://www.flickr.com/photos/spacexphotos/16787988882/">Flickr.com</a></figcaption>
+  </figure>
+  <figure>
+    <img src="images/spaceship2.jpg" alt="The Dragon spaceship landing on Mars.">
+    <figcaption>Artist mockup of Mars landing. Image from <a href="https://www.flickr.com/photos/spacexphotos/21424800115">Flickr.com</a></figcaption>
+  </figure>
+  <p>There’s various government organizations and companies that are building spaceships. One of them is
+  SpaceX. An image of one of their spaceships appears on this very page.</p>
+  <p>I can't be bothered to write any more about spaceships so the rest of the text will just be
+    nonsense. This isn’t a school assignment after all.</p>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi saepe harum, excepturi dolorum voluptatem hic amet nemo. Incidunt tenetur dignissimos laborum molestiae reiciendis ipsum quas temporibus nisi dolor, ea libero!</p>
+  <p>A assumenda, et eius odit, rerum delectus placeat dolores eveniet quis. Iure neque deserunt mollitia impedit illo corporis odio quod, velit ducimus!</p>
+</body>
+</html>
+```
+
+效果如下图所示：
+
+![TwoSpaceshipImage](https://pvnk1u.github.io/images/TwoSpaceshipImage.PNG)
+
+可以看到从第一个figure元素开始排在最右边，后面的第二个figure元素依次向左排列。
+
+
+
+**这种布局方式是很多CSS布局会用到的一种基本技术，即让浮动的元素构成一行中的列。但正如之前讨论过的，浮动也会有一些问题。浮动的元素并不在页面流中，因此需要一个元素来包含浮动元素。为此，可以给容器内部的一个（伪）元素应用clear，也可以通过规则让容器成为一个新的块级格式化上下文（BFC，blocking formating context）。必要时，浮动也可以包含多行，但如果上面的行有浮动元素，也可能会被卡住。**
+
+
+
+浮动也可以对有限的水平内容进行独立于源码次序的排序。比如，通过分别向左或向右浮动两个元素，可以调整两幅插图的次序。将上面代码示例中的float的值由right改为left即可实现两幅图片位置调换的效果。
+
+
+
+因为浏览器对浮动的支持极为普遍，所以浮动也成为了各种水平布局中的常用技术。除了浮动，实际上还有其他技术可以用来创建水平布局，虽然这些技术各有利弊。
+
+
+
+## 行内块布局
+
+文本行自身就是水平布局时，至少在从左往右和从右往左书写的语言中是如此。使用行内元素（如span、time或a）时，它们会与文本沿相同方向水平对齐。也可以把行内块加入到文本流中，创造出水平对齐的元素，从视觉上看又是一个块。
+
+
+
+比如，为太空飞船的文章末尾添加一些元数据，包括作者姓名、照片和电子邮件地址。为了添加样式，还使用了两个额外的span元素：
+
+```html
+<p class="author-meta">
+	<img class="author-image" src="images/author.jpg" alt="Arthur C. Lark">
+	<span class="author-info">
+		<span class="author-name">Written by Arthur C. Lark</span>
+		<a class="author-email" href="mailto:arthur.c.lark@example.com</a>">arthur.c.lark@example.com</a>
+	</span>
+</p>
+```
+
+现在，.author-meta段落的底部会与图片底部及文本基线对齐。段落中的所有空白字符，包括图片和作者信息之间的换行符都被渲染为空格。这些空格的宽度取决于字体及其大小。
+
+![author-case-1](https://pvnk1u.github.io/images/author-case-1.PNG)
+
+
+
+接下来，把图片和作者信息转换为行内块：
+
+```css
+.author-image,
+.author-info{
+	display: inline-block;
+}
+```
+
+渲染之后，其实并没有什么可见的差别。差别只在于现在图片和作者信息都是块了。比如，可以把作者信息中包含的姓名和电子邮件地址分别列为两行，只要把它们修改为块级元素即可：
+
+```css
+.author-name,
+.author-email{
+	display: block;
+}
+```
+
+ 现在已经比较接近想要的水平布局了：左边是浮动的图片，右边是一个文本块。但还有一点，此时作者信息块最后一行的基线与图片底部是对齐的。下图展示了此时的状况：
+
+![author-case-2](https://pvnk1u.github.io/images/author-case-2.PNG)
+
+
+
+现在可以通过vertical-align属性相对于图片来对齐作者信息。下图展示了在对齐关键字设置为top时，作者信息块的顶部与图片顶部对齐的效果：
+
+![author-case-3](https://pvnk1u.github.io/images/author-case-3.PNG)
+
+
+
+1. 行内块的垂直居中
+
+   假设想要的设计是让作者信息块相对于图片垂直居中。可能会这么写：
+
+   ```css
+   .author-info{
+   	vertical-align: middle;
+   }
+   ```
+
+   然而，结果可能并非是垂直居中，如下图所示：
+
+   ![author-case-4](https://pvnk1u.github.io/images/author-case-4.PNG)
+
+   这是因为，**关键字middle在应用给行内块时，其含义是“将这个行内块的垂直中心点与这行文本x高度的中心点对齐”。这个例子中没有行内文本，（行内最高的）图片就成为行盒子高度以及基线位置的元素。而此时x高度的中心点就在图片底部（基线）靠上一点。要想将作者信息与图片一起垂直居中，需要让这两个元素都参照同一个“中心点”：**
+
+   ```css
+   .author-image,
+   .author-info{
+   	vertical-align: middle;
+   }
+   ```
+
+   **因为图片此时也是行内块，所以它就与作者信息在同一个垂直点上居中对齐了**，从而得到了想要的布局，如下图所示：
+
+   ![author-case-5](https://pvnk1u.github.io/images/author-case-5.PNG)
+
+   
+
+   如何确定行盒子的基线，以及这些规则如何影响行内及行内块元素是比较复杂的。**对于利用行内块创建水平布局而言，如果需要垂直对齐，有以下两个要点：**
+
+   - **要让行内块沿上方对齐（很像浮动），设置：vertical-align: top;**
+   - **要让两个元素的内容垂直对齐，先把它们都转化成行内块，再对它们应用vertical-align: middle。**
+
+2. 在容器元素中垂直居中
+
+   前面的两个要点的第二个告诉我们：可以在任意高度的容器内垂直居中内容。其实也不完全对。唯一的前提是把容器的高度设置为确切的高度。
+
+   
+
+   比如，假设想把作者元数据块设置为10em高，然后在其中居中放置作者图片和信息。首先，给.author-meta块应用这个高度。为清晰起见，也添加了一个边框。如下图：
+
+   ```css
+   .author-meta{
+   	height: 10em;
+   	border: 1px solid #ccc;
+   }
+   ```
+
+   ![author-case-6](https://pvnk1u.github.io/images/author-case-6.PNG)
+
+   但作者信息和图片并没有相对于容器块垂直居中对齐，而是仍然沿原来那条假想的文本行对齐。**为了实现与容器垂直对齐，还需要增加一个行内块元素，让它占据100%的容器高度。这个元素会让middle关键字认为容器的垂直中点是对齐点。为此，可以借助伪元素。如下图所示，在引入了这个“幽灵元素”后，假想的基线就以它为准了。**
+
+   ```css
+   .author-meta:before{
+   	content: '',
+   	display: inline-block;
+   	vertical-align: middle;
+   	height: 100%;
+   }
+   ```
+
+   ![middle-of-box](https://pvnk1u.github.io/images/middle-of-box.PNG)
+
+   如图所示，利用高度为100%的伪元素，让middle关键字代表容器的垂直中心点。此时，就好像整个.author-meta容器中只有一行文本，且高度与容器高度相同。因为这个伪元素是一个行内块，且其垂直对齐方式设置为middle，所以其他行内块也就与容器的中心垂直对齐了。接下来要做的就是水平居中内容。因为行内块像文本一样对齐，所以这里使用text-align。
+
+   ```css
+   .author-meta{
+   	height: 10em;
+   	text-align: center;
+   	border: 1px solid #ccc;
+   }
+   
+   .author-info{
+   	text-align: left;
+   }
+   ```
+
+   结果就是.author-meta既水平居中又垂直居中，如下图所示：
+
+   ![author-case-7](https://pvnk1u.github.io/images/author-case-7.PNG)
+
+   确切地讲，这里的水平居中并不准确。这是因为行盒子内的任何空白符都会被渲染为一个空格。伪元素就会创建这么一个空格，导致内容向右偏移几个像素。通过给伪元素应用负外边距，可以抵消空格的宽度。
+
+   ```css
+   .author-info:before{
+   	margin-right: -.25em;
+   }
+   ```
+
+3. 追究细节：与空白战斗到底
+
+   对于每个块都占据确切宽度的水平布局而言，空白是个突出的问题。下面以另一个常见的组件为例，介绍在使用行内块的情况下如何解决这个问题，尽量不使用具体数值。
+
+   
+
+   创建一个导航条，包含4个链接项，每一项都占据宽度的四分之一。标记如下：
+
+   ```html
+   <nav class="navbar">
+   	<ul>
+   		<li><a href="/home">Home</a></li>
+   		<li><a href="/spaceships">Spaceships</a></li>
+   		<li><a href="/planets">Planets</a></li>
+   		<li><a href="/stars">Stars</a></li>
+   	</ul>
+   </nav>
+   ```
+
+   以下CSS标记为导航条添加了基本的颜色及字体样式，并通过轮廓线突出了链接项的边界。这里将每一项设置为占据25%的宽度，4项正好占据全部宽度。
+
+   ```
+   .navbar ul{
+   	font-family: 
+   }
+   ```
+
+   
 
