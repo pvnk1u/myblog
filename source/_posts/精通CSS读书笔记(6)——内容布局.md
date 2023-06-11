@@ -620,3 +620,86 @@ Flexbox就是为了解决行内块、浮动和表格格式对应的棘手问题�
 
 ## 浏览器支持与语法
 
+Flexbox已经得到主流浏览器较新版本的广泛支持。对于某些需要兼容的旧版本浏览器，只要调整一下语法或提供商前缀，基本上也没问题。
+
+
+
+## 理解Flex方向：主轴与辅轴
+
+Flexbox可以针对页面中某一区域，控制其中元素的顺序、大小、分布及对齐。这个区域内的盒子可以沿两个方向排列：默认水平排列（成一行），也可以垂直排列（成一列），这个排列方式称为主轴。
+
+
+
+与主轴垂直的方向称为辅轴，区域内的盒子可以沿辅轴发生位移或伸缩，如下图所示。通常，Flexbox布局中最重要的尺寸就是主轴方向的尺寸：水平布局时的宽度或垂直布局时的高度。主轴方向的这个尺寸为主尺寸。
+
+![flexboxmainandcross](https://pvnk1u.github.io/images/flexboxmainandcross.PNG)
+
+
+
+回头再看看之前的导航条（包含链接的无序列表和容器），它很容易转换成Flex容器。假设其他样式（颜色、字体、链接、边框）都一样，那么只要一行CSS代码即可。至于列表项，无须声明任何属性，而且也不必给每一项指明宽度。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Navbar using flexbox, no width</title>
+  <script src="js/html5shiv.min.js"></script>
+
+  <style>
+    nav {
+      display: block;
+    }
+    .navbar ul {
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: -webkit-box;
+      display: -moz-box;
+      display: flex;
+      font-family: 'Avenir Next', Avenir, Corbel, 'Franklin Gothic', 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+      list-style: none;
+      padding: 0;
+      background-color: #486a8e;
+    }
+    .navbar li {
+      text-transform: uppercase;
+      text-align: center;
+      -moz-box-sizing: border-box;
+           box-sizing: border-box;
+      background-color: #12459e;
+      outline: 1px solid #fff;
+    }
+    .navbar li a {
+      display: block;
+      text-decoration: none;
+      line-height: 1.75em;
+      padding: 1em;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <ul>
+      <li><a href="/home">Home</a></li>
+      <li><a href="/spaceships">Spaceships</a></li>
+      <li><a href="/planets">Planets</a></li>
+      <li><a href="/stars">Stars</a></li>
+    </ul>
+  </nav>
+</body>
+</html>
+```
+
+![flexboxnav](https://pvnk1u.github.io/images/flexboxnav.PNG)
+
+
+
+从上图中可以看到，链接项是水平排列的，而且根据各自的内容进行了收缩适应。结果就好像是块级文档流被旋转了90度一样。所有链接项集中在左侧，是从左到右书写的语言环境下的默认行为。如果把flex-direction改成row-inverse，那么所有链接就会集中到右侧，而且变成从右向左排列。
+
+
+
+**如果不指定大小，Flex容器内的项目会自动收缩。也就是说，一行中的各项会收缩到各自的最小宽度，或者一列中的各项会收缩到各自的最小高度，以恰好可以容纳自身内容为限。**
+
+
+
