@@ -703,3 +703,32 @@ Flexbox可以针对页面中某一区域，控制其中元素的顺序、大小�
 
 
 
+## 对齐与空间
+
+Flexbox对子项的排列有多种方式。沿主轴的排列叫排布，沿辅轴的排列叫对齐。
+
+
+
+用于指定排布格式的属性叫justify-content，其默认值是flex-start，表示按照当前文本方向排布（也就是向左对齐）。如果改成flex-end，所有项就都会挤到右侧（变成向右对齐），但顺序不变。下面的四个图分别展示了flex-end以及另外三个关键字center、space-between和space-around的效果。
+
+![justify-content](https://pvnk1u.github.io/images/justify-content.PNG)
+
+
+
+Flexbox不允许通过以上这些关键字指定个别项的排布方式。然而，对Flexbox的子项指定值为auto的外边距在这里却有不同的含义。因此，可以利用这一点。**具体来说，如果指定某项一侧的外边距值为auto，而且在容器里那一侧还有空间，那么该外边距就会扩展占据可用空间。**利用这一点，可以创造让一项位于一侧，其他项位于另一侧的布局。下图展示了第一项在左侧，其他项在右侧的布局。
+
+```css
+.navbar li:first-child{
+	margin-right: auto;
+}
+```
+
+![flexbox-auto](https://pvnk1u.github.io/images/flexbox-auto.PNG)
+
+本质上来说，像这样使用自动外边距抵消了其他项的排布效果，因为之后就没有多余空间可分了。尽管如此，对其他项仍然可以应用外边距。
+
+
+
+1.  辅轴对齐
+
+   
