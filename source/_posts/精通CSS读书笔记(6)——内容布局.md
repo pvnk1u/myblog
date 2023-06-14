@@ -731,4 +731,28 @@ Flexbox不允许通过以上这些关键字指定个别项的排布方式。然�
 
 1.  辅轴对齐
 
+   前面通过Flexbox轻松解决了水平布局的问题。实际上，Flexbox还支持对另一轴向的控制。如果增加Flex容器自身或其中一项的高度，会发现控制另一轴向属性的默认值会产生下图这种有趣的效果。
+
+   ```css
+   .navbar ul{
+   	min-height: 100px;
+   }
+   ```
+
+   ![flexbox-min-height](https://pvnk1u.github.io/images/flexbox-min-height.PNG)
+
+   如图所示，默认情况下，Flex子项会沿辅轴方向填满Flex容器。好像这些子项被拉高了。实际上，控制辅轴对齐的属性align-items，其默认值是stretch（拉伸）。也就是说，子项默认拉伸，以填满可用空间。其他的关键字还有flex-start、center和flex-end，效果分别如下图所示。这3个关键字都会把子项收缩成原有大小，然后再沿辅轴进行上、中、下对齐。
+
+   ![align-items](https://pvnk1u.github.io/images/align-items.PNG)
+
+   
+
+   最后，**还可以使用baseline关键字，将子项中文本的基线与容器基线对齐，效果与行内块的默认行为类似。如果子项大小不一，而又希望它们在辅轴上虽然位置不同，但本身对齐，那么就可以采用这种方法。**
+
+   
+
+   
+
+   
+
    
