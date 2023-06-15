@@ -729,7 +729,7 @@ Flexbox不允许通过以上这些关键字指定个别项的排布方式。然�
 
 
 
-1.  辅轴对齐
+1. 辅轴对齐
 
    前面通过Flexbox轻松解决了水平布局的问题。实际上，Flexbox还支持对另一轴向的控制。如果增加Flex容器自身或其中一项的高度，会发现控制另一轴向属性的默认值会产生下图这种有趣的效果。
 
@@ -753,6 +753,45 @@ Flexbox不允许通过以上这些关键字指定个别项的排布方式。然�
 
    
 
+   在下图中，添加了一个类名表示当前活动的项：
+
+   ```html
+   <ul>
+   	<li><a href="/home">Home</a></li>
+   	<li class="navbar-active"><a href="/spaceships">Spaceships</a></li>
+   	<li><a href="planets">Planets</a></li>
+   	<li><a href="/stars">Stars</a></li>
+   </ul>
+   ```
+
+   ![flex-active-item](https://pvnk1u.github.io/images/flex-active-item.PNG)
+
    
+
+   这个活动项的font-size稍大一点，而且z-index值为1.
+
+   ```css
+   .navbar .navbar-active{
+   	font-size: 1.25em;
+   }
+   ```
+
+   现在，容器的基线由较大活动项的基线决定，其他项都自动与之对齐。
+
+2. 对齐个别项
+
+   除了同时对齐所有项，还可以在辅轴上指定个别项的对齐方式。比如，可以让“HOME”项对齐到左上角，让其他项对齐到右下角。
+
+   ```css
+   .navbar ul{
+   	min-height: 100px;
+   	align-items; flex-end;
+   }
+   
+   .navbar li:first-child{
+   	align-self: flex-start;
+   	margin-right: auto;
+   }
+   ```
 
    
