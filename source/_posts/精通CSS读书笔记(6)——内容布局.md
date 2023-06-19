@@ -794,4 +794,58 @@ Flexbox不允许通过以上这些关键字指定个别项的排布方式。然�
    }
    ```
 
+   ![align-some-item](https://pvnk1u.github.io/images/align-some-item.PNG)
+
+3. Flexbox中的垂直对齐
+
+   终于，Flex使得可以轻松解决垂直对齐问题了。在容器里面只有一个元素时，只要将容器设置为flex，再将需要居中的元素的外边距设置为auto就行了。这是因为Flexbox中各项的自动外边距会扩展“填充”相应方向的空间。
+
+   ```html
+   <div class="flex-container">
+   	<div class="flex-item">
+   		<h2>Not so lost in space</h2>
+   		<p>This item sits right in the middle of its container...</p>
+   	</div>
+   </div>
+   ```
+
+   无论容器或其中元素有多大，仅需以下代码，即可实现水平垂直居中.flex-item。在这个例子中，让容器与视口一样高（在html、body和.flex-container元素上都设置了height: 100%），就是为了让效果更明显。
+
+   ```css
+   html,body{
+   	height: 100%;
+   }
    
+   .flex-container{
+   	height: 100%;
+   	display: flex;
+   }
+   
+   .flex-item{
+   	margin: auto;
+   }
+   ```
+
+   如果Flex容器中有多个元素，就像前面作者元素数据的例子一样，那么可以使用对齐属性把它们聚拢到水平和垂直中心上。为此，把排布和对齐都设置为center（当然，这也适用于单个元素的情况，只不过margin: auto的代码更少）。
+
+   ```css
+   .author-meta{
+   	display: flex;
+   	flex-direction: column;
+   	justify-content: center;
+   	align-items: center;
+   }
+   ```
+
+   ![flexbox-multi-center](https://pvnk1u.github.io/images/flexbox-multi-center.PNG)
+
+   
+
+
+
+## 可伸缩的尺寸
+
+
+
+
+
