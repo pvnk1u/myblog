@@ -828,18 +828,69 @@ Flexbox不允许通过以上这些关键字指定个别项的排布方式。然�
 
    如果Flex容器中有多个元素，就像前面作者元素数据的例子一样，那么可以使用对齐属性把它们聚拢到水平和垂直中心上。为此，把排布和对齐都设置为center（当然，这也适用于单个元素的情况，只不过margin: auto的代码更少）。
 
-   ```css
-   .author-meta{
-   	display: flex;
-   	flex-direction: column;
-   	justify-content: center;
-   	align-items: center;
-   }
-   ```
-
-   ![flexbox-multi-center](https://pvnk1u.github.io/images/flexbox-multi-center.PNG)
-
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+   <head>
+     <meta charset="UTF-8">
+     <title>Vertical centering using flexbox</title>
+     <script src="js/html5shiv.min.js"></script>
+     <style>
+       body {
+         font-family: Georgia, Times New Roman, serif;
+         line-height: 1.5;
+         padding: 2em 8em;
+         max-width: 35em;
+         margin: 0 auto;
+       }
+       
+       .author-meta {
+         border: 1px solid #ccc;
+         height: 160px;
+         display: -webkit-box;
+         display: -webkit-flex;
+         display: -moz-box;
+         display: -ms-flexbox;
+         display: flex; /* [1] */
+         -webkit-box-align: center;
+         -webkit-align-items: center;
+            -moz-box-align: center;
+             -ms-flex-align: center;
+                 align-items: center; /* [2] */
+         -webkit-box-pack: center;
+         -webkit-justify-content: center;
+            -moz-box-pack: center;
+             -ms-flex-pack: center;
+                 justify-content: center; /* [3] */
+       }
+       .author-info {
+         margin-left: 0.5em;
+       }
+       .author-name,
+       .author-email {
+         display: block;
+       }
    
+     </style>
+   </head>
+   <body>
+   
+     <p class="author-meta">
+         <img class="author-image" src="images/author.jpg" alt="Arthur C. Lark">
+         <span class="author-info">
+           <span class="author-name">Written by Arthur C. Lark</span>
+           <a class="author-email" href="mailto:arthur.c.lark@example.com">arthur.c.lark@example.com</a>
+         </span>
+       </p>
+   </body>
+   </html>
+   ```
+   
+   
+   
+   ![flexbox-multi-center](https://pvnk1u.github.io/images/flexbox-multi-center.PNG)
+   
+   在这里，使用flex-direction将author-meta内的元素排列为垂直显示，就像一列一样，所以author-meta内的图片元素author-image和文本元素author-info
 
 
 
@@ -868,6 +919,8 @@ Flexbox支持对元素大小的灵活控制。这一点是实现精确内容布�
    - flex-shrink
 
      也是一个弹性系数，与flex-grow类似，但作用相反。换句话说，如果空间不够，该项如何收缩？增加了flex-shrink这个因素之后，计算过程更加复杂了。默认值是1，表示如果空间不够，所有项都会以自己的首选尺寸为基准等比例收缩。
+
+   要理解flex-basis与flex-grow以及flex-shrink的关系并不容易。Flexbox使用了相当复杂的算法来计算各伸缩项的大小。但是，如果将计算过程简化为以下两个步骤，那么理解起来就容易多了。
 
    
 
