@@ -890,7 +890,7 @@ Flexbox不允许通过以上这些关键字指定个别项的排布方式。然�
    
    ![flexbox-multi-center](https://pvnk1u.github.io/images/flexbox-multi-center.PNG)
    
-   在这里，使用flex-direction将author-meta内的元素排列为垂直显示，就像一列一样，所以author-meta内的图片元素author-image和文本元素author-info
+   在这里，使用flex-direction将author-meta内的元素排列为垂直显示，就像一列一样。所以排在行内元素img之后的文本元素author-info中的两个行内元素便被垂直排布了。
 
 
 
@@ -922,6 +922,60 @@ Flexbox支持对元素大小的灵活控制。这一点是实现精确内容布�
 
    要理解flex-basis与flex-grow以及flex-shrink的关系并不容易。Flexbox使用了相当复杂的算法来计算各伸缩项的大小。但是，如果将计算过程简化为以下两个步骤，那么理解起来就容易多了。
 
+   - 检查flex-basis，确定假想的主尺寸。
+   - 确定实际的主尺寸。如果按照假想的主尺寸把各项排布好之后，容器内还有剩余空间，那么它们可以伸展。伸展多少由flex-grow系数决定。相应地，如果容器装不下那么多项，则根据flex-shrink系数决定各项如何收缩。
+
    
 
-2. 
+   举一个例子来更好地理解这些属性。在这个例子中，假设容器宽度是1000像素。标记中，这个容器包含两个子元素。其中一个包含一个短单词（用“Short”表示），另一个包含一个长单词（用“Looooooong”表示）。因此，前者要占据200像素宽度，后者要占据400像素宽度。此时项目还没有放到容器中。
+
+   ![flex-property-example](https://pvnk1u.github.io/images/flex-property-example.PNG)
+
+   如果这两项的flex-basis值都是默认的auto，而且都没有设置width属性，那么当它们放到容器中时，它们会各自依据自身内容确定宽度（如下图），因此一共会占据600像素。这是flex-basis默认值的结果，与前面导航条中的例子一致。
+
+   ```css
+   .navbar li{
+   	flex-basis: auto; /* 默认值 */
+   }
+   ```
+
+   ![flex-property-example1](https://pvnk1u.github.io/images/flex-property-example1.PNG)
+
+   因为有剩余空间可分配，所以可以考虑flex-grow了。默认情况下，flex-grow的值为0，对各项的大小没有影响。假设此时把flex-flow的值设置为1会怎么样呢？
+
+   ```css
+   .navbar li{
+   	flex-basis: auto;
+   	flex-grow: 1;
+   }
+   ```
+
+   默认的0和现在的1都代表什么？它们并不表示特定的大小，而表示具体的”几份“。
+
+   **这个例子里有两项，结果是两项会伸展相同的距离。它们的1份表示各自分得剩余空间的一半，也就是200像素。**换句话说第一项最终的宽度是400像素，第二项最终的宽度是600像素。加在一起，正好是容器的宽度，如下图所示。
+
+   ![flex-property-example2](https://pvnk1u.github.io/images/flex-property-example2.PNG)
+
+   假如给它们分别设置不同的flex-grow，类似这样：
+
+   ```css
+   .navbar li:first-child{
+   	flex-grow: 3;
+   }
+   
+   .navbar li:last-child{
+   	flex-grow: 1;
+   }
+   ```
+
+   这会导致第一项分得剩余空间的四分之三，第二项分得四分之一。结果就是，两项各占500像素的宽度！
+
+   ![flex-property-example3](https://pvnk1u.github.io/images/flex-property-example3.PNG)
+
+   此例中的两项最终恰好平分秋色。如果希望各项能够按比例占据整个空间而不考虑各自内容，那么还有更合适的Flexbox技术，后面会介绍。
+
+2. 纯粹按伸缩系数计算大小
+
+   
+
+3. 收缩项目
