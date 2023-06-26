@@ -986,4 +986,58 @@ Flexbox支持对元素大小的灵活控制。这一点是实现精确内容布�
 
    
 
+   接下来要使用flex这个简写属性一次性设置flex-grow、flex-shrink和flex-basis属性，顺序就是这样，值以空格分隔：
+
+   ```css
+   .navbar li{
+   	flex: 1 0 0%;
+   }
+   ```
+
+   注意，最后一个flex-basis值加了百分号。这是因为简写法中的flex-basis必须带单位，因此这里要么加百分号，要么就写成0px。
+
+   
+
+   如果想让第一个项目占据的空间是其他项目的2倍，就把其flex-grow值设置为2：
+
+   ```css
+   .navbar li{
+   	flex: 1 0 0%;
+   }
+   
+   .navbar li:first-child{
+   	flex-grow: 2;
+   }
+   ```
+
+   将以上规则应用给包含4项的导航条标记后，第一项占据2/5（40%）的宽度，后三项各占1/5（20%）的宽度，如下图所示:
+
+   ![flex-navbar-five](https://pvnk1u.github.io/images/flex-navbar-five.PNG)
+
 3. 收缩项目
+
+   当项目宽度总和超过容器宽度时，Flexbox会按照flex-shrink属性来决定如何收缩它们。此时的收缩机制比flex-grow稍微麻烦一些。麻烦的根源在于，不能因为某个大项目总体宽度超出，就把小项目压缩得不可见了。让项目占据更多空间（比如前面的flex-grow）比较容易理解，不过是按比例分配而已。但收缩的时候，情况就不一样了。
+
+   
+
+   再以之前1000像素宽的导航条为例，假设这一次两个子项目都通过flex-basis预先设置了宽度。两项宽度的总和超出了容器宽度300像素，如下图所示：
+
+   ```css
+   .navbar li:first-child{
+   	flex: 1 1 800px;
+   }
+   
+   .navbar li:last-child{
+   	flex: 1 1 500px;
+   }
+   ```
+
+   ![flex-shrink1](https://pvnk1u.github.io/images/flex-shrink1.PNG)
+
+   加在一起的首选宽度（1300像素）超出了容器宽度300像素。而且两个项目的flex-shrink值都是1。
+
+   
+
+
+
+## Flexbox布局
