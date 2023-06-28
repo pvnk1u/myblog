@@ -1165,6 +1165,63 @@ body {
 
 2. 多行布局中可伸缩的大小
 
+   Flexbox对多行布局的另一个好处是，可以利用可伸缩的大小均匀填充每一行（如下图所示）。flex-grow的计算是以行为单位的，因此项目的可扩展空间以行的宽度为限。
+
+   ```css
+   .tag li{
+   	flex: 1 0 auto;
+   }
+   ```
+
+   ![flex-box-same-width-line](https://pvnk1u.github.io/images/flex-box-same-width-line.PNG)
+
    
 
+   此时最后一个标签另起一行后变得非常长。然而，多行Flexbox布局中没有办法控制特定的某一行。换句话说，无法告诉这些项目，让它们到了最后一行就不再扩展了。
+
+   
+
+   要解决当前这个问题，可以给所有标签设置max-width，限制可伸缩的范围（如下图所示）。
+
+   ```css
+   .tags li{
+   	display: inline-block;
+   	margin: .5em;
+   	flex: 1 0 auto;
+   	max-width: 14em;
+   }
+   ```
+
+   ![flexbox-max-width](https://pvnk1u.github.io/images/flexbox-max-width.PNG)
+
+   
+
+   总体来说，可以填充多余空间是Flexbox的核心优势。通过综合使用flex-grow及min-width和max-width，就能实现非常智能的多行flexbox布局。无论屏幕多大，或者容器里项目有多少，所有项目都会有合理的大小。
+
 3. 对齐所有行
+
+   在前面介绍辅轴对齐属性（align-items和align-self）时，我们知道flexbox允许我们相对于一行的flex-start、center、baseline和flex-end这几个点来对齐项目。而在多行布局中，则可以相对于容器来对齐行或列。
+
+   
+
+   如果在标签容器列表中设置了min-height: 300px，就可以知道相对于容器对齐行或列的align-content属性的效果了。默认情况下，这个属性的值是stretch，意思是每一行都会拉伸以填充自己应占的容器高度。如果通过浏览器右键菜单中“检查“来看一看标签，会发现每一个li元素都拉伸为容器高度的三分之一，如下图所示：
+
+   ```css
+   .tags{
+   	display: flex;
+   	flex-wrap: wrap;
+   	min-height: 300px;
+   	/* align-content: stretch; 在这里是默认值 */
+   }
+   ```
+
+   ![flexbox-stretch](https://pvnk1u.github.io/images/flexbox-stretch.PNG)
+
+   align-content对容器中多行的作用，与justify-content对主轴内容排布的作用非常相似。换句话说，通过align-content还可以把多行排布到flex-start（容器顶部）、flex-end（容器底部）、center（容器中部），还可以通过space-between或space-arount让多行分隔开。
+
+## 列布局与个别排序
+
+使用Flexbox的order属性，可以完全摆脱项目在源代码中顺序的约束。只要告诉浏览器这个项目排第几就可以了。默认情况下，每个项目的order值都为0，意味着按照它们在源代码中的顺序出现。
+
+
+
