@@ -1066,5 +1066,105 @@ Flexbox支持对元素大小的灵活控制。这一点是实现精确内容布�
 
 这次设计一组标签，表示星球的种类。这些标签是包含链接的一个无序列表，跟导航条例子中类似。但这里的列表项目要多出好几倍，因此不可能让它们都挤在一行中。这里会给标签设置统一的背景颜色，并使用前面评注气泡中用到的伪元素技术，给它们应用实际标签的外观。
 
+![flex-li-item-list](https://pvnk1u.github.io/images/flex-li-item-list.PNG)
 
+```html
+<body>
+  <ul class="tags">
+    <li><a href="/Binary_planet">Binary planet</a></li>
+    <li><a href="/Carbon_planet">Carbon planet</a></li>
+    <li><a href="/Coreless_planet">Coreless planet</a></li>
+    <li><a href="/Desert_planet">Desert planet</a></li>
+    <li><a href="/Dwarf_planet">Dwarf planet</a></li>
+    <li><a href="/Earth_analog">Earth analog</a></li>
+    <li><a href="/Exoplanet">Exoplanet</a></li>
+    <li><a href="/Gas_giant">Gas giant</a></li>
+    <li><a href="/Helium_planet">Helium planet</a></li>
+    <li><a href="/Ice_giant">Ice giant</a></li>
+    <li><a href="/Lava_planet">Lava planet</a></li>
+    <li><a href="/Mesoplanet">Mesoplanet</a></li>
+    <li><a href="/Ocean_planet">Ocean planet</a></li>
+    <li><a href="/Pulsar_planet">Pulsar planet</a></li>
+    <li><a href="/Rogue_planet">Rogue planet</a></li>
+    <li><a href="/Terrestrial_planet">Terrestrial planet</a></li>
+    <li><a href="/Sub-brown_dwarf">Sub-brown dwarf</a></li>
+  </ul>
+</body>
+</html>
+```
 
+样式有点多：
+
+```css
+body {
+  font-family: 'Avenir Next', Avenir, Corbel, 'Franklin Gothic', 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+}
+.tags {
+  border: 1px solid #c9e1f4;
+  margin: 0;
+  padding: 1em;
+  list-style: none;
+}
+.tags li {
+  display: inline-block;
+  margin: .5em;
+}
+.tags a {
+  display: block;
+  padding: .25em .5em .25em .25em;
+  background-color: #c9e1f4;
+  border-radius: 0 .25em .25em 0;
+  line-height: 1.5;
+  text-decoration: none;
+  color: #28448f;
+  position: relative;
+  text-align: center;
+}
+.tags a:before {
+  position: absolute;
+  content: '';
+  width: 0;
+  height: 0;
+  border: 1em solid transparent;
+  border-right-width: .5em;
+  border-right-color: #c9e1f4;
+  left: -1.5em;
+  top: 0;
+}
+```
+
+应用上面的样式后，标签都成了行内块，可以随时折行。接下来该Flexbox上场了。首先，把列表元素转换为Flex容器，再通过flex-wrap属性的wrap值告诉它允许子元素折行：
+
+```css
+.tags{
+	display: -webkit-flex;
+    display: -ms-flexbox;
+    display: -moz-box;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    border: 1px solid #c9e1f4;
+  	margin: 0;
+  	padding: 1em;
+  	list-style: none;
+}
+```
+
+结果跟刚才差不多。但现在可以用Flexbox来控制方向、大小和行的对齐了。
+
+1. 折行与方向
+
+   首先，可以反转行中标签的排布方向（跟导航条例子中一样）。把flex-direction的值改为row-reverse，所有标签一下子就变成了从右上角起从右向左排布，每一行都变成了右对齐，如下图所示：
+
+   ![flex-li-item-list.-reverse](https://pvnk1u.github.io/images/flex-li-item-list.-reverse.PNG)
+
+   
+
+   也可以通过flex-wrap反转垂直排布的方向，让第一行从底部开头，然后向上折行！
+
+2. 多行布局中可伸缩的大小
+
+   
+
+3. 对齐所有行
