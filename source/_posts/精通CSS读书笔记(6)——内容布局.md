@@ -1225,3 +1225,125 @@ body {
 
 
 
+通过Flexbox可以任意摆放项目顺序。在接下来的例子中，来创建一个小小的“文章导读”组件，其中包含飞船文章的节选，有标题、图片，还有一个阅读全文的链接。这个组件会以一列的形式出现。
+
+
+
+首先从标记开始，组件内容的次序按照它们的重要性来排定：
+
+1. 以文章标题为内容的标题
+2. 导读正文
+3. 与文本主题相关的插图
+4. 指向文章的链接
+
+
+
+```html
+<div class="article-teaser">
+	<h2>The Dragon and other spaceships</h2>
+	<div class="article-teaser-text">
+  		<p>There are actual spaceships,
+    	flying in space right now, probably. For example, there’s the International Space Station, which is 
+    	a spaceship of sorts. Well, actually it’s a space station, which is even cooler!</p>
+  	</div>
+  	<img src="images/medium_spaceship.jpg" alt="The Dragon spaceship in orbit around Earth.">
+  	<p class="article-teaser-more">
+    	<a href="/spaceships">Read the whole Spaceship article</a>
+  	</p>
+</div>
+```
+
+完成后的文章导读组件如下图所示。这里为组件添加了一些基本样式，主要是外边距、颜色和字体。
+
+
+
+![flexbox-article1](https://pvnk1u.github.io/images/flexbox-article1.PNG)
+
+
+
+从设计上说，把图片放在最前面可以抓住读者的眼球。但在HTML中，把图片放在第一位不一定合适。这是因为对屏幕阅读器而言，最好是一上来就拿到文章标题，然后播报给读者。
+
+
+
+为了能让图片排在最前头，需要把.article-teaser容器转换为一个Flexbox列：
+
+```css
+.article-teaser{
+	display: flex;
+	flex-direction: column;
+}
+```
+
+然后，给图片一个比默认值0小的order值，让它第一个出现（如下图）：
+
+![flexbox-article2](https://pvnk1u.github.io/images/flexbox-article2.PNG)
+
+
+
+## 嵌套的Flexbox布局
+
+最后一个例子会展示可嵌套的Flexbox布局，以及一种非常实用的技术。
+
+重用上面的文章导读组件的例子，但这次有两个组件，并排在一起。为此，给它们加一个包装元素，将Flexbox方向设置为row。
+
+```html
+<div class="article-teaser-group">
+	<div class="article-teaser">
+  		<h2>The Dragon and other spaceships</h2>
+  		<div class="article-teaser-text">
+    		<p>There are actual spaceships,
+      			flying in space right now, probably. For example, there’s the International Space Station, which is 
+      			a spaceship of sorts. Well, actually it’s a space station, which is even cooler!</p>
+    	</div>
+    	<!-- image from SpaceX on Flick: https://flic.kr/p/rzuQdb -->
+    	<img src="images/medium_spaceship.jpg" alt="The Dragon spaceship in orbit around Earth.">
+    	<p class="article-teaser-more">
+      		<a href="/spaceships">Read the whole Spaceship article</a>
+    	</p>
+  	</div>
+  	<div class="article-teaser">
+        <h2>Mission to mars</h2>
+        <div class="article-teaser-text">
+            <p>This is a pretty cool article about spaceships flying to Mars.</p>
+        </div>
+        <!-- image from SpaceX on Flick: https://flic.kr/p/xGdh8d -->
+        <img src="images/medium_mars.jpg" alt="A spaceship about to land on Mars.">
+        <p class="article-teaser-more">
+            <a href="/spaceships">Read the whole Mars article</a>
+        </p>
+  </div>
+</div>
+```
+
+将包装元素设置为一个Flexbox行：
+
+```css
+.article-teaser-group{
+	display: flex;
+}
+```
+
+效果如下图：
+
+![flexbox-group](https://pvnk1u.github.io/images/flexbox-group.PNG)
+
+之前也看到过等高的Flexbox可伸缩项。但在可伸缩项本身又是Flexbox容器时，比如本例的情况，还得再祭出一个“终极大法”。因为两个组件虽然一样高，但它们的内容却不是。第二个组件明显短一截，“阅读详情”按钮一个高一个低，视觉上明显不平衡。Flexbox可以解决这个问题。
+
+
+
+还记得把外边距设为auto就能让可伸缩项吃掉所有剩余空间吗？所以这里只要在“阅读详情”元素上设置margin-top: auto，就可以把它推到列的底部，让两个组件的元素在视觉上对齐。
+
+```css
+.article-teaser-more{
+	margin-top: auto;
+}
+```
+
+![flexbox-margin-auto](https://pvnk1u.github.io/images/flexbox-margin-auto.PNG)
+
+
+
+如果使用之前的老技术，比如浮动、行内块和定位，那么实现这种动态内容布局肯定会相当麻烦。但是如果Flexbox不可用呢？那么这两个组件会回退为更简单但绝对可用的设计，这也正是下一节的主题。
+
+
+
