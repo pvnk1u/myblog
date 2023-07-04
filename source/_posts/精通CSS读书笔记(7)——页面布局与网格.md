@@ -183,16 +183,295 @@ body{
 	</div>
 </header>
 <nav role="navigation" class="navbar">
-	<div class="wrapper">
-		<ul class="navlist">
-			<li><a href="/">Home</a></li>
-			<!-- 还有更多 -->
-		</ul>
-	</div>
-</nav>
+    <div class="wrapper">
+      <ul class="navlist">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">World</a></li>
+        <li><a href="#">Local</a></li>
+        <li><a href="#">Sports</a></li>
+      </ul>
+    </div>
+  </nav>
 <main class="wrapper">
 	<!-- 这里是主体内容 -->
 </main>
+```
+
+相关CSS代码如下：
+
+```css
+/* here's our wrapper */
+.wrapper {
+  width: 95%;
+  max-width: 76em;
+  margin: 0 auto;
+}
+
+/* masthead styling */
+.masthead {
+  background-color: #8E3339;
+}
+.masthead h1 {
+  margin: 0;
+  padding: 0.5em 0;
+  color: #fff;
+  text-shadow: -.1em .1em 0 rgba(0,0,0,0.3);
+}
+
+/* navbar styling */
+.navbar {
+  background-color: #5E2126;
+  margin-bottom: 1.375em;
+}
+
+nav {
+  display: block;
+}
+.navbar ul {
+  font-family: 'Avenir Next', Avenir, Corbel, 'Franklin Gothic', 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: #752A2F;
+  display: flex;
+  overflow: hidden;
+}
+.navbar li {
+  float: left;
+  text-transform: uppercase;
+  text-align: center;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  border-left: 1px solid #8E3339;
+}
+.navbar li:first-child {
+  border-left: 0;
+}
+.navbar li a {
+  display: block;
+  text-decoration: none;
+  line-height: 1.75em;
+  padding: 1em 2em;
+  color: #fff;
+}
+```
+
+
+
+效果如下图所示：
+
+![grid-demo](https://pvnk1u.github.io/images/grid-demo.PNG)
+
+
+
+## 创建行容器和列
+
+创建好了头部菜单之后，再来实现“内容“部分在水平方向上的分组。效果如下图所示：
+
+![layout-demo-section](https://pvnk1u.github.io/images/layout-demo-section.PNG)
+
+
+
+完整代码如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Finished column layout sketch</title>
+
+  <!-- the base styles and "housekeeping" styles are in here: -->
+  <link rel="stylesheet" href="css/grid-base.css">
+<!-- the HTML5 shiv, to help older browsers understand styling
+ on newer HTML5 elements: -->
+ <script src="js/html5shiv.min.js"></script>
+ <style>
+  /* our grid styles: */
+  .row:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+  .row-quartet > * {
+    width: 25%;
+  }
+  .row-trio > * {
+    width: 33.3333%;
+  }
+  .col {
+    float: left;
+    -moz-box-sizing: border-box;
+         box-sizing: border-box;
+    min-height: 100px;
+    outline: 1px solid #666;
+  }
+  .subcategory-featured {
+    width: 50%;
+  }
+  .subcategory-content {
+    width: 80%;
+  }
+  .subcategory-header {
+    width: 20%;
+  }
+</style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrapper">
+      <h1>Important News</h1>
+      
+    </div>
+  </header>
+
+  <nav role="navigation" class="navbar">
+    <div class="wrapper">
+      <ul class="navlist">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">World</a></li>
+        <li><a href="#">Local</a></li>
+        <li><a href="#">Sports</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="wrapper">
+    <section class="subcategory">
+      <div class="row">
+        <header class="col subcategory-header">
+          <h2>Sub-section 1</h2>
+        </header>
+        <div class="col subcategory-content">
+          <div class="row row-quartet">
+            <div class="col subcategory-featured">
+              <h3>Story</h3>
+            </div>
+            <div class="col">
+              <h3>Story</h3>
+            </div>
+            <div class="col">
+              <h3>Story</h3>
+            </div>
+          </div>
+          <div class="row row-quartet">
+            <div class="col">
+              <h3>Story</h3>
+            </div>
+            <div class="col">
+              <h3>Story</h3>
+            </div>
+            <div class="col">
+              <h3>Story</h3>
+            </div>
+            <div class="col">
+              <h3>Story</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="subcategory">
+      <div class="row">
+        <header class="col subcategory-header">
+          <h2>Sub-section 1</h2>
+        </header>
+
+        <div class="col subcategory-content">
+          <div class="row row-trio">
+            <div class="col">
+              <h3>Story</h3>
+            </div>
+            <div class="col">
+              <h3>Story</h3>
+            </div>
+            <div class="col">
+              <h3>Story</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>    
+</body>
+</html>
+```
+
+引用的grid-base.css中的样式表代码：
+
+```css
+body {
+  margin: 0;
+  line-height: 1.375;
+  font-family: Georgia, Times New Roman, Times, serif;
+}
+h1,h2,h3,h4,h5,h6 {
+  font-family: Avenir Next, Avenir, Franklin Gothic, Trebuchet MS, Arial, sans-serif;
+  margin-top: 0;
+}
+a {
+  color: #8E3339;
+  text-decoration: none;
+}
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+/* here's our wrapper */
+.wrapper {
+  width: 95%;
+  max-width: 76em;
+  margin: 0 auto;
+}
+/* masthead styling */
+.masthead {
+  background-color: #8E3339;
+}
+.masthead h1 {
+  margin: 0;
+  padding: 0.5em 0;
+  color: #fff;
+  text-shadow: -.1em .1em 0 rgba(0,0,0,0.3);
+}
+
+/* navbar styling */
+.navbar {
+  background-color: #5E2126;
+  margin-bottom: 1.375em;
+}
+
+nav {
+  display: block;
+}
+.navbar ul {
+  font-family: 'Avenir Next', Avenir, Corbel, 'Franklin Gothic', 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: #752A2F;
+  display: flex;
+  overflow: hidden;
+}
+.navbar li {
+  float: left;
+  text-transform: uppercase;
+  text-align: center;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  border-left: 1px solid #8E3339;
+}
+.navbar li:first-child {
+  border-left: 0;
+}
+.navbar li a {
+  display: block;
+  text-decoration: none;
+  line-height: 1.75em;
+  padding: 1em 2em;
+  color: #fff;
+}
 ```
 
 
