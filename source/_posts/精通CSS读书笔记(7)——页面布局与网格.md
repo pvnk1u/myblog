@@ -487,7 +487,7 @@ nav {
 }
 ```
 
-这里使用伪元素和clear:both实现.row行元素分别各占一行的效果。
+这里使用伪类和clear:both实现.row行元素分别各占一行的效果。
 
 
 
@@ -501,8 +501,12 @@ nav {
 .col{
 	float: left;
 	box-sizing: border-box;
+    min-height: 100px;
+    outline: 1px solid #666;
 }
 ```
+
+其中的min-height是为列指定了最低高度。outline则是指定了列的轮廓线（因为不影响元素尺寸，所以轮廓线适用于元素可视化布局和调试布局）。
 
 
 
@@ -578,3 +582,304 @@ nav {
 	width: 33.3333%;
 }
 ```
+
+在前面的效果图中，两个子分类都有一个标题区，占整个布局区（包含标题区和内容区两块）的五分之一，右侧的内容区占剩下的五分之四。而在第一个子分类中，还有一个更大的文章列，占内容区的50%。相关代码如下：
+
+```css
+.subcategory-featured {
+	width: 50%;
+}
+
+.subcategory-content {
+	width: 80%;
+}
+
+.subcategory-header {
+	width: 20%;
+}
+```
+
+HTML代码如下：
+
+```html
+<section class="subcategory">
+  <div class="row">
+    <header class="col subcategory-header">
+      <h2>Sub-section 1</h2>
+    </header>
+    <div class="col subcategory-content">
+      <div class="row row-quartet">
+        <div class="col subcategory-featured">
+          <h3>Story</h3>
+        </div>
+        <div class="col">
+          <h3>Story</h3>
+        </div>
+        <div class="col">
+          <h3>Story</h3>
+        </div>
+      </div>
+      <div class="row row-quartet">
+        <div class="col">
+          <h3>Story</h3>
+        </div>
+        <div class="col">
+          <h3>Story</h3>
+        </div>
+        <div class="col">
+          <h3>Story</h3>
+        </div>
+        <div class="col">
+          <h3>Story</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="subcategory">
+  <div class="row">
+    <header class="col subcategory-header">
+      <h2>Sub-section 1</h2>
+    </header>
+
+    <div class="col subcategory-content">
+      <div class="row row-trio">
+        <div class="col">
+          <h3>Story</h3>
+        </div>
+        <div class="col">
+          <h3>Story</h3>
+        </div>
+        <div class="col">
+          <h3>Story</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+
+
+至此便实现了图中的效果。在这些定义好的网格类基础上，很容易组合和扩展出更复杂的布局模式。下面在每个容器中添加一些示例内容，以充实细节。
+
+
+
+以下是带图片文章的代码：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Float grid with dummy content</title>
+
+  <!-- the base styles and "housekeeping" styles are in here: -->
+  <link rel="stylesheet" href="css/grid-base.css">
+<!-- the HTML5 shiv, to help older browsers understand styling
+ on newer HTML5 elements: -->
+ <script src="js/html5shiv.min.js"></script>
+ <style>
+  /* grid styling */
+  .row {
+    margin: 0 -.9%;
+    padding: 0;
+    list-style: none;
+  }
+  .row:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+  .col {
+    float: left;
+    -moz-box-sizing: border-box;
+         box-sizing: border-box;
+  }
+  .col:last-child {
+    float: right;
+  }
+  .row-quartet > * {
+    width: 25%;
+  }
+  .row-trio > * {
+    width: 33.33333%;
+  }
+
+  /* content styling */
+
+  .subcategory {
+    margin-top: 1.5em;
+    border-bottom: 1px solid #8e3339;
+  }
+  .subcategory-featured {
+    width: 50%;
+  }
+  .subcategory-content {
+    width: 80%;
+  }
+  .subcategory-header {
+    width: 20%;
+  }
+
+
+  .story {
+    padding: .6875em;
+    background-color: #eee;
+  }
+  .story img {
+    width: 100%;
+  }
+
+</style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrapper">
+      <h1>Important News</h1>
+    </div>
+  </header>
+
+  <nav role="navigation" class="navbar">
+    <div class="wrapper">
+      <ul class="navlist">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">World</a></li>
+        <li><a href="#">Local</a></li>
+        <li><a href="#">Sports</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="wrapper">
+    
+    <section class="subcategory">
+      <div class="row">
+        <header class="col subcategory-header">
+          <h2>Lorem ipsum</h2>
+        </header>
+        <div class="col subcategory-content">
+          <div class="row row-quartet">
+            <div class="col subcategory-featured">
+              <article class="story">
+                <img src="http://placehold.it/600x300" alt="Dummy image">
+                <h3><a href="#">Cras suscipit nec leo id.</a></h3>
+                <p>Autem repudiandae aliquid tempora quos reprehenderit architecto, sequi repellat.</p>
+              </article>
+            </div>
+            <div class="col">
+              <article class="story">
+                <img src="http://placehold.it/600x300" alt="Dummy image">
+                <h3><a href="#">Perferendis, ipsam!</a></h3>
+                <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+              </article>
+            </div>
+            <div class="col">
+              <article class="story">
+                <img src="http://placehold.it/600x300" alt="Dummy image">
+                <h3><a href="#">Curabitur mattis purus nec velit.</a></h3>
+                <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+              </article>
+            </div>
+          </div>
+          <div class="row row-quartet">
+            <div class="col">
+              <article class="story">
+                <h3><a href="#">Perferendis, ipsam!</a></h3>
+                <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+              </article>
+            </div>
+            <div class="col">
+              <article class="story">
+                <h3><a href="#">Aliquam mattis eros id posuere.</a></h3>
+                <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+              </article>
+            </div>
+            <div class="col">
+              <article class="story">
+                <h3><a href="#">Proin leo felis, semper nec</a></h3>
+                <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+              </article>
+            </div>
+            <div class="col">
+              <article class="story">
+                <h3><a href="#">Aliquam vitae risus tortor. Sed!</a></h3>
+                <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="subcategory">
+      <div class="row">
+        <header class="col subcategory-header">
+          <h2>Dolor sit amet</h2>
+        </header>
+        <div class="col subcategory-content">
+          <div class="row row-trio">
+            <div class="col">
+              <article class="story">
+                <img src="http://placehold.it/600x300" alt="Dummy image">
+                <h3><a href="#">Ut sit amet mi massa</a></h3>
+                <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+              </article>
+            </div>
+            <div class="col">
+              <article class="story">
+                <h3><a href="#">Nunc mollis sit amet nunc</a></h3>
+                <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+              </article>
+              <article class="story">
+                <h3><a href="#">Duis sed ante enim. Cras</a></h3>
+                <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+              </article>
+            </div>
+            <div class="col">
+              <article class="story">
+                <img src="http://placehold.it/600x300" alt="Dummy image">
+                <h3><a href="#">Animi, explicabo, ipsum</a></h3>
+                <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+```
+
+效果图如下所示：
+
+![float-grid-pic-content-demo](https://pvnk1u.github.io/images/float-grid-pic-content-demo.PNG)
+
+
+
+在列容器（类名为col的元素）中，使用了带story类名的article元素。这个额外的元素将布局与内容隔离开来，避免因加重包装元素的负担而导致其过载。
+
+
+
+这里需要注意的是以下有关.story的CSS代码：
+
+```css
+.story {
+    padding: .6875em;
+    background-color: #eee;
+}
+
+.story img {
+	width: 100%;
+}
+```
+
+这里指定了.story元素的padding内边距的值及背景颜色，使内容区更加美观，随后设置.story的子img图片元素的宽度为100%。这里需要注意的是，例子中用的是同样一张图片，但是因为img的父元素.story的宽度不同，所以展示出的图片大小也不同，第一张图片的story的宽度是其他story元素的2倍，所以图片大小也是其他图片的两倍。
+
+
+
+## 流式空距
+
+
+
