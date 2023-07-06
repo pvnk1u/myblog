@@ -476,3 +476,105 @@ nav {
 
 
 
+接下来分析这份代码，在这段代码中，首先创建了行容器（class名为row）及行容器中的多列内容。首先定义HTML元素及类名（行为row，列为col），然后实现了内容在水平方向上的分组。
+
+```css
+.row:after{
+	content: '',
+	display: block;
+	clear: both;
+	height: 0;
+}
+```
+
+这里使用伪元素和clear:both实现.row行元素分别各占一行的效果。
+
+
+
+实现了行元素之后，再来实现创建列的效果。上一章的几种水平布局方法中，浮动是最常用的，也是浏览器支持最好的技术。因此，这里用浮动创建列。对于从左向右书写的语言，默认的向左浮动应该是最佳选择。
+
+
+
+考虑到将来可能会在不影响列宽度的前提下，直接给列容器添加边框和内边距，还应该把box-sizing属性设置为border-box。
+
+```css
+.col{
+	float: left;
+	box-sizing: border-box;
+}
+```
+
+
+
+接下来需要给列设置列宽。很多CSS库都使用直接表示宽度的类来指定列宽，比如：
+
+```css
+.col-1of4{
+	width: 25%;
+}
+.col-1of2{
+	width: 50%;
+}
+```
+
+这种方式非常适合面向台式电脑或笔记本电脑的快速原型。根据前面定义的规则，很容易在HTML中定义一个3列的、最左列占一半宽度的布局。
+
+```html
+<div class="row">
+	<div class="col col-1of2"></div>
+	<div class="col col-1of4"></div>
+	<div class="col col-1of4"></div>
+</div>
+```
+
+这种方式的缺点是过分强调某种布局。如果将来需要根据屏幕大小动态调整布局，这种命名方式就不太合适了。
+
+
+
+如果想通过可重用的类名来控制尺寸，就必须让HTML标记与CSS表现有一个结合点。可以给这个结合点换个名字，不使用特定的宽度或者比率，让它更为普适。用音乐来比喻的话，可以创建一条规则，让行容器在正常情况下包含4个宽度相等的部分（quartet，四重奏）。
+
+```css
+.row-quartet > * {
+	width: 25%;
+}
+```
+
+然后使用通用选择符，直接针对行容器的子元素，同时可以降低这条通用规则的特殊性。因为通用选择符的特殊性为0，所以后面可以用一个特殊的类名来覆盖这个宽度。此时通过以下标记就可以创建一个包含4个等宽列的行：
+
+```html
+<div class="row row-quartet">
+	<div class="col"></div>
+	<div class="col"></div>
+	<div class="col"></div>
+    <div class="col"></div>
+</div>
+```
+
+这样，.row-quartet中的列如果想改变宽度，就可以应用覆盖宽度的一个类名，但这个类名并不与布局相关。于是前面的3列布局就可以这样写：
+
+```html
+<div class="row row-quartet">
+	<div class="col my-special-column"></div>
+	<div class="col"></div>
+	<div class="col"></div>
+</div>
+```
+
+```css
+.my-special-column{
+	width: 50%;
+}
+```
+
+
+
+除了四重奏，当然还应该有三重奏：
+
+```css
+.row-quartet > *{
+	width: 25%;
+}
+.row-trio > *{
+	width: 33.3333%;
+}
+```
