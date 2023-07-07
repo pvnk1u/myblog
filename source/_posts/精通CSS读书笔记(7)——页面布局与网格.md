@@ -683,7 +683,6 @@ HTML代码如下：
  <style>
   /* grid styling */
   .row {
-    margin: 0 -.9%;
     padding: 0;
     list-style: none;
   }
@@ -939,3 +938,306 @@ HTML代码如下：
 
 
 
+1. 抵消最外侧的空距
+
+   现在，我们有了一个网格系统，可以表示行、流动的列和流式空距。接下来要做的是处理细节，尽量避免视觉效果冲突。
+
+   
+
+   首先，用于创建空距的外边距导致了外层容器左边和右边额外的缩进，这不是我们想要的。在内部行中嵌套的列也出现了同样的问题（如下图所示）。我们应该去掉第一项的左外边距和最后一项的右外边距。但这样会导致列宽和空距的计算复杂化。
+
+   ![gutter-problem](https://pvnk1u.github.io/images/gutter-problem.PNG)
+
+   
+
+   **对于没有特定宽度的非浮动块级元素，会在左、右负外边距都设置的情况下扩展其宽度。**由于我们使用了一个独立的元素作为行来分隔内容（而不是让列元素也充当行再去嵌套列），此时正好可以利用这一点来应用我们的技巧，那就是给每一行的左、右两侧都应用一个等于空距一半宽度的负外边距。
+
+   ```css
+   .row{
+   	margin: 0 -.9%;
+   }
+   ```
+
+2. 设置空距的替代方案
+
+   要想进一步简化列宽的计算，可以利用box-sizing属性，并使用内边距来设置空距。
+
+   
+
+   如果想继续使用流式空距，那么只要把外边距改成内边距即可。这样就可以重新以整个宽度的适当百分比来表示列宽，而不必考虑空距了。
+
+   ```css
+   .col{
+   	float: left;
+   	box-sizing: border-box;
+   	padding: 0 .9% 1.375em;
+   }
+   
+   .row-trio > *{
+   	width: 33.3333%;
+   }
+   
+   .subcategory-featured{
+   	width: 50%;
+   }
+   
+   
+   ```
+
+   这样一来就可以使用排版的基准来设置空距了。换句话说，可以使用em来设置空距，而不用基于网格宽度的百分比。在下面的例子中，空距大小与行高相同，在列之间创建了相同的垂直与水平间距，而这与网格的宽度无关。
+
+   ```css
+   .col{
+   	float: left;
+   	box-sizing: border-box;
+   	padding: 0 .6875em .1375em;
+   }
+   ```
+
+   
+
+   完整代码如下所示：
+
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+   <head>
+     <meta charset="UTF-8">
+     <title>Float grid with elastic gutters</title>
+   
+     <!-- the base styles and "housekeeping" styles are in here: -->
+     <link rel="stylesheet" href="css/grid-base.css">
+   <!-- the HTML5 shiv, to help older browsers understand styling
+    on newer HTML5 elements: -->
+    <script src="js/html5shiv.min.js"></script>
+    <style>
+     /* grid styling */
+     .row {
+       margin: 0 -.6875em;
+       padding: 0;
+       list-style: none;
+     }
+     .row:after {
+       content: '';
+       display: block;
+       clear: both;
+     }
+     .row-quartet > * {
+       width: 25%;
+     }
+     .row-trio > * {
+       width: 33.3333%;
+     }
+     .col {
+       float: left;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+       padding: 0 .6875em 1.375em;
+     }
+     .col:last-child {
+       float: right;
+     }
+   
+     /* content styling */
+   
+     .subcategory {
+       margin-top: 1.5em;
+       border-bottom: 1px solid #8e3339;
+     }
+     .subcategory-featured {
+       width: 50%;
+     }
+     .subcategory-content {
+       width: 80%;
+     }
+     .subcategory-header {
+       width: 20%;
+     }
+   
+     .story {
+       padding: .6875em;
+       background-color: #eee;
+     }
+     .story + .story {
+       margin-top: 1.375em;
+     }
+     .story img {
+       width: 100%;
+     }
+   
+   </style>
+   </head>
+   <body>
+     <header class="masthead">
+       <div class="wrapper">
+         <h1>Important News</h1>
+         
+       </div>
+     </header>
+   
+     <nav role="navigation" class="navbar">
+       <div class="wrapper">
+         <ul class="navlist">
+           <li><a href="#">Home</a></li>
+           <li><a href="#">World</a></li>
+           <li><a href="#">Local</a></li>
+           <li><a href="#">Sports</a></li>
+         </ul>
+       </div>
+     </nav>
+     <main class="wrapper">
+       
+       <section class="subcategory">
+         <div class="row">
+           <header class="col subcategory-header">
+             <h2>Lorem ipsum</h2>
+           </header>
+           <div class="col subcategory-content">
+             <div class="row row-quartet">
+               <div class="col subcategory-featured">
+                 <article class="story">
+                   <img src="http://placehold.it/600x300" alt="Dummy image">
+                   <h3><a href="#">Cras suscipit nec leo id.</a></h3>
+                   <p>Autem repudiandae aliquid tempora quos reprehenderit architecto, sequi repellat.</p>
+                 </article>
+               </div>
+               <div class="col">
+                 <article class="story">
+                   <img src="http://placehold.it/600x300" alt="Dummy image">
+                   <h3><a href="#">Perferendis, ipsam!</a></h3>
+                   <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+                 </article>
+               </div>
+               <div class="col">
+                 <article class="story">
+                   <img src="http://placehold.it/600x300" alt="Dummy image">
+                   <h3><a href="#">Curabitur mattis purus nec velit.</a></h3>
+                   <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+                 </article>
+               </div>
+             </div>
+             <div class="row row-quartet">
+               <div class="col">
+                 <article class="story">
+                   <h3><a href="#">Perferendis, ipsam!</a></h3>
+                   <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+                 </article>
+               </div>
+               <div class="col">
+                 <article class="story">
+                   <h3><a href="#">Aliquam mattis eros id posuere.</a></h3>
+                   <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+                 </article>
+               </div>
+               <div class="col">
+                 <article class="story">
+                   <h3><a href="#">Proin leo felis, semper nec</a></h3>
+                   <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+                 </article>
+               </div>
+               <div class="col">
+                 <article class="story">
+                   <h3><a href="#">Aliquam vitae risus tortor. Sed!</a></h3>
+                   <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+                 </article>
+               </div>
+             </div>
+           </div>
+         </div>
+       </section>
+   
+       <section class="subcategory">
+         <div class="row">
+           <header class="col subcategory-header">
+             <h2>Dolor sit amet</h2>
+           </header>
+           <div class="col subcategory-content">
+             <div class="row row-trio">
+               <div class="col">
+                 <article class="story">
+                   <img src="http://placehold.it/600x300" alt="Dummy image">
+                   <h3><a href="#">Ut sit amet mi massa</a></h3>
+                   <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+                 </article>
+               </div>
+               <div class="col">
+                 <article class="story">
+                   <h3><a href="#">Nunc mollis sit amet nunc</a></h3>
+                   <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+                 </article>
+                 <article class="story">
+                   <h3><a href="#">Duis sed ante enim. Cras</a></h3>
+                   <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+                 </article>
+               </div>
+               <div class="col">
+                 <article class="story">
+                   <img src="http://placehold.it/600x300" alt="Dummy image">
+                   <h3><a href="#">Animi, explicabo, ipsum</a></h3>
+                   <p>Neque magnam vero obcaecati facere nobis sint dolore accusamus vitae consequuntur ad necessitatibus, laborum molestiae.</p>
+                 </article>
+               </div>
+             </div>
+           </div>
+         </div>
+       </section>
+     </main>
+   </body>
+   </html>
+   ```
+
+   
+
+   效果如下图所示，通过设置相对于文本大小的“弹性”空距，空距就跟内容宽度无关了。
+
+   ![padding-gutter](https://pvnk1u.github.io/images/padding-gutter.PNG)
+
+
+
+## 增强列：包装与等高
+
+前面创建布局主要使用了浮动。除了浮动以外，还有很多其他布局方案可以实现同样布局的例子掌握这些方法以后，可创造出更灵活的布局。
+
+
+
+1. 用行内块包装行和列
+
+   有时会有如下图这样的两行或更多行标题的HTML区域，使用浮动块来包装这些行可能会有问题。比如，某个新闻的标题很长，导致该列非常高，就会出现非常难看的“锯齿”效果。
+
+   ![multiline-problem](https://pvnk1u.github.io/images/multiline-problem.PNG)
+
+   
+
+   
+
+   为此，可以创建一个通用的类名，预期的应用场景就是包装多行。对添加了这个类名的容器，应用基于文本大小技术的inline-block。此时，由于font-size是0，在设置行容器的负外边距时要使用rem单位。考虑到向后兼容，这里还添加了像素单位的后备规则：
+
+   ```css
+   .row-wrapping{
+   	font-size: 0;
+   	margin: 0 -11px;
+   	margin: 0 -.6875rem;
+   }
+   
+   .row-wrapping > * {
+   	float: none;
+   	vertical-align: top;
+   	display: inline-block;
+   	font-size: 16px;
+   	font-size: 1rem;
+   }
+   ```
+
+   有了这两条规则，就可以添加任意多个新闻预览，这些新闻预览会在填满一行四列后自动折行。在验证结果之前，先用Flexbox再打磨一下细节。
+
+2. 使用Flexbox实现等高的列
+
+   之前介绍过，Flexbox可以用来创建等高的列。在创建一整套布局时，我们希望有些规则只在浏览器支持Flexbox时应用。
+
+   
+
+   
+
+
+
+## 作为网页布局通用工具的Flexbox
