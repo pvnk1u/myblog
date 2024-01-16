@@ -104,6 +104,7 @@ theme: pure
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   - type: git
-    repo: https://github.com/pvnk1u/pvnk1u.github.io.git # 注意要把地址改为自己的仓库地址
+    # repo: https://github.com/pvnk1u/pvnk1u.github.io.git # 注意要把地址改为自己的仓库地址
+    repo: git@github.com:pvnk1u/pvnk1u.github.io.git # 注意要把地址改为自己的仓库地址
     branch: main
     message: "Build at {{ now('yyyy-MM-DD HH:mm:ss Z') }}"
